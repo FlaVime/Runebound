@@ -1,6 +1,14 @@
 using UnityEngine;
 
-public enum GameState { MainMenu, Map, Combat }
+public enum GameState {
+    MainMenu,
+    Map,
+    Combat,
+    Event,
+    Shop,
+    Rest,
+    Boss
+}
 
 public class GameManager : Singleton<GameManager> {
     public GameState CurrentState { get; private set; }
