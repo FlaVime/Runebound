@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager> {
     }
 
     private void Start() {
-        ChangeState(GameState.Map); // CHANGE HERE TO MAIN MENU OR MAP
+        
     }
 
     public void ChangeState(GameState newState) {
