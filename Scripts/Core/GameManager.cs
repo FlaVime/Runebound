@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public enum GameState {
     MainMenu,
@@ -7,41 +8,75 @@ public enum GameState {
     Event,
     Shop,
     Rest,
-    Boss
+    Boss,
+    GameOver,
+    Victory
 }
 
 public class GameManager : Singleton<GameManager> {
     public GameState CurrentState { get; private set; }
-
-    public int playerHP {get; private set; } = 100;
-    public int playerGold {get; private set; } = 0;
-    public int playerSouls {get; private set; } = 0;
+    
+    [SerializeField] private PlayerData playerData = new PlayerData();
+    public PlayerData PlayerData => playerData;
+    
+    public event Action<GameState> OnGameStateChanged;
 
     protected override void Awake() {
-        base.Awake(); // Вызываем базовый Awake из Singleton
-        DontDestroyOnLoad(gameObject); // Делаем объект неуничтожимым при смене сцены
+        base.Awake();
+        DontDestroyOnLoad(gameObject);
+        
+        // Initialize player data
+        playerData.Init();
+        
+        // Register event listeners to handle state transitions
+        playerData.onHealthChanged.AddListener(CheckPlayerHealth);
     }
 
     private void Start() {
-        
+        ChangeState(GameState.MainMenu);
     }
 
     public void ChangeState(GameState newState) {
+        if (newState == CurrentState)
+            return;
+            
         CurrentState = newState;
+        OnGameStateChanged?.Invoke(newState);
+        
+        // Load appropriate scene based on state
         SceneLoader.Instance.Load(newState.ToString());
     }
-
-    // Player stats management
-    public void AddGold(int amount) {
-        playerGold += amount;
-        // Можно вызвать обновление UI
+    
+    private void CheckPlayerHealth(int health)
+    {
+        if (health <= 0 && CurrentState != GameState.GameOver)
+        {
+            ChangeState(GameState.GameOver);
+        }
     }
-
-    public void AddSouls(int amount) {
-        playerSouls += amount;
+    
+    // Combat rewards
+    public void GiveRewards(int gold, int souls, int experience)
+    {
+        playerData.AddGold(gold);
+        playerData.AddSouls(souls);
+        playerData.AddExperience(experience);
     }
-
-    public void TakeDamage(int damage) {
-        playerHP = Mathf.Max(0, playerHP - damage);
+    
+    // Save/Load functionality can be added here
+    public void SaveGame()
+    {
+        string json = JsonUtility.ToJson(playerData);
+        PlayerPrefs.SetString("SavedGame", json);
+        PlayerPrefs.Save();
+    }
+    
+    public void LoadGame()
+    {
+        if (PlayerPrefs.HasKey("SavedGame"))
+        {
+            string json = PlayerPrefs.GetString("SavedGame");
+            playerData = JsonUtility.FromJson<PlayerData>(json);
+        }
     }
 }
