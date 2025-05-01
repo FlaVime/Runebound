@@ -1,16 +1,45 @@
 using UnityEngine;
-
+using UnityEngine.Events;
 public class CharacterBase : MonoBehaviour {
-    public int maxHP;
-    public int currentHP;
-    public int attackPower;
+    [Header("Stats")]
+    public float maxHealth = 100f;
+    public float currentHealth;
+    public float baseDamage = 10f;
+    protected float defenseMultiplier = 1f;
 
-    public virtual void TakeDamage(int damage) {
-        currentHP -= damage;
-        if (currentHP < 0) currentHP = 0;
+    public UnityEvent<float> onHealthChanged;
+    public UnityEvent onDeath;
+
+    protected virtual void Start()
+    {
+        currentHealth = maxHealth;
     }
 
-    public virtual void Attack(CharacterBase target) {
-        target.TakeDamage(attackPower);
+    public virtual void TakeDamage(float damage)
+    {
+        float actualDamage = damage * defenseMultiplier;
+        currentHealth = Mathf.Max(0, currentHealth - actualDamage);
+        onHealthChanged?.Invoke(currentHealth / maxHealth);
+
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    public virtual void Heal(float amount)
+    {
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        onHealthChanged?.Invoke(currentHealth / maxHealth);
+    }
+
+    public virtual void SetDefenseMultiplier(float multiplier)
+    {
+        defenseMultiplier = multiplier;
+    }
+
+    protected virtual void Die()
+    {
+        onDeath?.Invoke();
     }
 }

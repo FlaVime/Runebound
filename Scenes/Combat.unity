@@ -621,6 +621,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bd1be6091d807c47b6f5479d519df54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  enemies: []
+  enemyTurnDelay: 1
+  victoryPanel: {fileID: 0}
+  gameOverPanel: {fileID: 0}
+  rewardPanel: {fileID: 0}
+  rewardButtons: []
+  onGameOver:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1431960512}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onVictory:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2138228534}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &183669746
 Transform:
   m_ObjectHideFlags: 0
@@ -1595,6 +1635,7 @@ GameObject:
   m_Component:
   - component: {fileID: 424543111}
   - component: {fileID: 424543112}
+  - component: {fileID: 424543113}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1674,6 +1715,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &424543113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424543110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5652bc3b2ca881343b3789ed3bd1f93b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &430826998
 GameObject:
   m_ObjectHideFlags: 0
@@ -2247,7 +2300,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 556873985}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1143526660}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &556873985
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2586,6 +2651,7 @@ GameObject:
   m_Component:
   - component: {fileID: 689861753}
   - component: {fileID: 689861754}
+  - component: {fileID: 689861755}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -2665,6 +2731,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &689861755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689861752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5652bc3b2ca881343b3789ed3bd1f93b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &748340773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2675,6 +2753,7 @@ GameObject:
   m_Component:
   - component: {fileID: 748340774}
   - component: {fileID: 748340775}
+  - component: {fileID: 748340776}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -2754,6 +2833,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &748340776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 748340773}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5652bc3b2ca881343b3789ed3bd1f93b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &779937584
 GameObject:
   m_ObjectHideFlags: 0
@@ -4228,6 +4319,65 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1141473487}
   m_CullTransparentMesh: 1
+--- !u!1 &1143526660
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1143526661}
+  - component: {fileID: 1143526662}
+  m_Layer: 0
+  m_Name: PlayerController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1143526661
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143526660}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 882.4048, y: 482.0515, z: -5.915509}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1143526662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143526660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ea28f014dc18a41a3a512d2766175d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  baseDamage: 10
+  onHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnergyChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onEnemySelected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1147056949
 GameObject:
   m_ObjectHideFlags: 0
@@ -5195,6 +5345,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1347266247}
   - component: {fileID: 1347266248}
+  - component: {fileID: 1347266249}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -5274,6 +5425,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1347266249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347266246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5652bc3b2ca881343b3789ed3bd1f93b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1431960512
 GameObject:
   m_ObjectHideFlags: 0
@@ -7835,3 +7998,4 @@ SceneRoots:
   - {fileID: 389441313}
   - {fileID: 399037751}
   - {fileID: 679309240}
+  - {fileID: 1143526661}
