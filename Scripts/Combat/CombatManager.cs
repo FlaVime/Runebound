@@ -1,37 +1,44 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using TMPro;
+
+public enum CombatState
+{
+    Start,
+    PlayerTurn,
+    EnemyTurn,
+    SelectingTarget,
+    Won,
+    Lost
+}
 
 public class CombatManager : MonoBehaviour
 {
     public static CombatManager Instance { get; private set; }
 
-    [Header("References")]
-    public PlayerController player;
-    public List<Enemy> enemies;
-    
-    [Header("Turn Settings")]
-    public float enemyTurnDelay = 1f;
-    
-    [Header("UI References")]
-    public GameObject victoryPanel;
+    [Header("Setup")]
+    public GameObject playerPrefab;
+    public GameObject enemyPrefab;
+    public Transform playerBattleStation;
+    public Transform enemyBattleStation;
+
+    [Header("Units")]
+    CharacterBase playerUnit;
+    CharacterBase enemyUnit;
+
+    [Header("UI")]
+    public CombatHUD playerHUD;
+    public CombatHUD enemyHUD;
+    public GameObject actionButtonsPanel;
     public GameObject gameOverPanel;
-    public GameObject rewardPanel;
-    public Button[] rewardButtons;
-    
-    public UnityEvent onGameOver;
-    public UnityEvent onVictory;
-    public UnityEvent<CombatState> onStateChanged;
+    public GameObject victoryPanel;
 
-    private CombatState currentState;
-    public CombatState CurrentState => currentState;
+    public CombatState combatState;
     
-    private int combatGoldReward;
-    private int combatSoulsReward;
-    private int combatExperienceReward;
-
     private void Awake()
     {
         if (Instance == null)
@@ -43,255 +50,231 @@ public class CombatManager : MonoBehaviour
             Destroy(gameObject);
         }
         
-        // Initialize UI
-        if (victoryPanel != null) victoryPanel.SetActive(false);
+        // Hide panels initially
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        if (rewardPanel != null) rewardPanel.SetActive(false);
+        if (victoryPanel != null) victoryPanel.SetActive(false);
     }
-
-    private void Start()
+    
+    void Start()
     {
+        combatState = CombatState.Start;
         SetupCombat();
     }
 
-    private void SetupCombat()
+    public void SetupCombat()
     {
-        // Reset accumulated rewards
-        combatGoldReward = 0;
-        combatSoulsReward = 0;
-        combatExperienceReward = 0;
+        // Spawn player character
+        GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
+        playerUnit = playerGO.GetComponent<CharacterBase>();
+
+        // Spawn enemy character
+        GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
+        enemyUnit = enemyGO.GetComponent<CharacterBase>();
+
+        // Setup UI
+        playerHUD.SetHUD(playerUnit);
+        enemyHUD.SetHUD(enemyUnit);
         
-        // Setup enemy death listeners
-        foreach (var enemy in enemies)
-        {
-            enemy.onDeath.AddListener(() => CheckVictoryCondition());
-            enemy.onEnemyDefeated.AddListener(() => AccumulateRewards(enemy));
-        }
+        // Subscribe to health change events
+        playerUnit.onHealthChanged.AddListener(OnPlayerHealthChanged);
+        enemyUnit.onHealthChanged.AddListener(OnEnemyHealthChanged);
         
-        // Setup player death
-        player.onDeath.AddListener(GameOver);
-        
-        // Start with player turn
-        SetState(CombatState.PlayerTurn);
+        // Start player turn
+        StartCoroutine(StartPlayerTurn());
     }
     
-    private void AccumulateRewards(Enemy enemy)
+    private void OnPlayerHealthChanged(float healthPercent)
     {
-        combatGoldReward += enemy.goldReward;
-        combatSoulsReward += enemy.soulsReward;
-        combatExperienceReward += enemy.experienceReward;
-    }
-
-    public void SetState(CombatState newState)
-    {
-        currentState = newState;
-        onStateChanged?.Invoke(newState);
-
-        switch (newState)
-        {
-            case CombatState.PlayerTurn:
-                StartPlayerTurn();
-                break;
-            case CombatState.EnemyTurn:
-                StartCoroutine(EnemyTurnSequence());
-                break;
-            case CombatState.Victory:
-                HandleVictory();
-                break;
-            case CombatState.GameOver:
-                HandleGameOver();
-                break;
-        }
-    }
-
-    private void StartPlayerTurn()
-    {
-        // Reset any turn-based effects here
-    }
-
-    private IEnumerator EnemyTurnSequence()
-    {
-        foreach (var enemy in enemies)
-        {
-            if (enemy.gameObject.activeInHierarchy)
-            {
-                enemy.TakeTurn();
-                yield return new WaitForSeconds(enemyTurnDelay);
-            }
-        }
-
-        SetState(CombatState.PlayerTurn);
-    }
-
-    private void CheckVictoryCondition()
-    {
-        bool allEnemiesDead = true;
-        foreach (var enemy in enemies)
-        {
-            if (enemy.gameObject.activeInHierarchy)
-            {
-                allEnemiesDead = false;
-                break;
-            }
-        }
-
-        if (allEnemiesDead)
-        {
-            Victory();
-        }
-    }
-
-    private void Victory()
-    {
-        SetState(CombatState.Victory);
-        onVictory?.Invoke();
-    }
-    
-    private void HandleVictory()
-    {
-        // Show victory UI
-        if (victoryPanel != null)
-        {
-            victoryPanel.SetActive(true);
-        }
+        playerHUD.SetHealth(playerUnit.currentHealth);
         
-        // Setup reward panel if available
-        SetupRewardOptions();
-        
-        // Update GameManager state
-        if (GameManager.Instance != null)
+        if (healthPercent <= 0)
         {
-            // Don't transition yet - wait for reward selection
+            combatState = CombatState.Lost;
+            EndCombat();
         }
     }
     
-    private void SetupRewardOptions()
+    private void OnEnemyHealthChanged(float healthPercent)
     {
-        // Show reward panel after a short delay
-        StartCoroutine(ShowRewardPanel());
+        enemyHUD.SetHealth(enemyUnit.currentHealth);
+        
+        if (healthPercent <= 0)
+        {
+            combatState = CombatState.Won;
+            EndCombat();
+        }
     }
     
-    private IEnumerator ShowRewardPanel()
+    private IEnumerator StartPlayerTurn()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.0f);
+        combatState = CombatState.PlayerTurn;
+        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(true);
+    }
+    
+    private IEnumerator EnemyTurn()
+    {
+        yield return new WaitForSeconds(1f);
         
-        if (rewardPanel != null)
+        // Simple AI - enemy always attacks
+        if (enemyUnit.currentHealth > 0)
         {
-            rewardPanel.SetActive(true);
+            playerUnit.TakeDamage(enemyUnit.baseDamage);
             
-            // Setup reward buttons with random rewards
-            if (rewardButtons != null && rewardButtons.Length > 0)
+            playerHUD.SetHealth(playerUnit.currentHealth);
+
+            yield return new WaitForSeconds(1f);
+            
+            if (combatState != CombatState.Lost)
             {
-                // Setup rewards (this is just an example - expand as needed)
-                SetupRewardButton(rewardButtons[0], "Gold", () => GiveGoldReward());
-                
-                if (rewardButtons.Length > 1)
-                {
-                    SetupRewardButton(rewardButtons[1], "Souls", () => GiveSoulsReward());
-                }
-                
-                if (rewardButtons.Length > 2)
-                {
-                    SetupRewardButton(rewardButtons[2], "Health", () => GiveHealthReward());
-                }
+                StartCoroutine(StartPlayerTurn());
             }
         }
     }
     
-    private void SetupRewardButton(Button button, string rewardType, UnityAction action)
+    // Button action handlers
+    public void OnAttackButton()
     {
-        if (button != null)
+        if (combatState != CombatState.PlayerTurn) return;
+        
+        StartCoroutine(PlayerAttack());
+    }
+    
+    public void OnDefendButton()
+    {
+        if (combatState != CombatState.PlayerTurn) return;
+        
+        StartCoroutine(PlayerDefend());
+    }
+    
+    public void OnAbilityButton()
+    {
+        if (combatState != CombatState.PlayerTurn) return;
+        
+        StartCoroutine(PlayerAbility());
+    }
+    
+    public void OnSkipButton()
+    {
+        if (combatState != CombatState.PlayerTurn) return;
+        
+        StartCoroutine(PlayerSkip());
+    }
+    
+    private IEnumerator PlayerAttack()
+    {
+        // Disable action buttons during attack
+        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
+        
+        enemyUnit.TakeDamage(playerUnit.baseDamage);
+        
+        enemyHUD.SetHealth(enemyUnit.currentHealth);
+
+        yield return new WaitForSeconds(1f);
+        
+        if (combatState == CombatState.PlayerTurn)
         {
-            // Clear previous listeners
-            button.onClick.RemoveAllListeners();
-            
-            // Set button text
-            Text buttonText = button.GetComponentInChildren<Text>();
-            if (buttonText != null)
-            {
-                buttonText.text = rewardType;
-            }
-            
-            // Add listener
-            button.onClick.AddListener(action);
-            button.onClick.AddListener(ReturnToMap);
+            // Switch to enemy turn
+            combatState = CombatState.EnemyTurn;
+            StartCoroutine(EnemyTurn());
         }
     }
     
-    private void GiveGoldReward()
+    private IEnumerator PlayerDefend()
     {
-        // Give bonus gold (50% more)
-        int bonusGold = Mathf.FloorToInt(combatGoldReward * 0.5f);
-        GameManager.Instance.GiveRewards(combatGoldReward + bonusGold, combatSoulsReward, combatExperienceReward);
+        // Disable action buttons during defend
+        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
+        
+        playerUnit.SetDefenseMultiplier(0.5f); // Take half damage
+        
+        yield return new WaitForSeconds(1f);
+        
+        if (combatState == CombatState.PlayerTurn)
+        {
+            // Switch to enemy turn
+            combatState = CombatState.EnemyTurn;
+            StartCoroutine(EnemyTurn());
+        }
     }
     
-    private void GiveSoulsReward()
+    private IEnumerator PlayerAbility()
     {
-        // Give bonus souls (50% more)
-        int bonusSouls = Mathf.FloorToInt(combatSoulsReward * 0.5f);
-        GameManager.Instance.GiveRewards(combatGoldReward, combatSoulsReward + bonusSouls, combatExperienceReward);
+        // Disable action buttons during ability
+        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
+        
+        enemyUnit.TakeDamage(playerUnit.baseDamage * 1.5f);
+        
+        enemyHUD.SetHealth(enemyUnit.currentHealth);
+
+        yield return new WaitForSeconds(1f);
+        
+        if (combatState == CombatState.PlayerTurn)
+        {
+            // Switch to enemy turn
+            combatState = CombatState.EnemyTurn;
+            StartCoroutine(EnemyTurn());
+        }
     }
     
-    private void GiveHealthReward()
+    private IEnumerator PlayerSkip()
     {
-        // Give standard rewards plus heal
-        GameManager.Instance.GiveRewards(combatGoldReward, combatSoulsReward, combatExperienceReward);
-        GameManager.Instance.PlayerData.Heal(20);
+        // Disable action buttons during skip
+        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
+        
+        playerUnit.SetDefenseMultiplier(1.5f); // Take more damage, but recover
+        
+        playerHUD.SetHealth(playerUnit.currentHealth);
+
+        yield return new WaitForSeconds(1f);
+        
+        if (combatState == CombatState.PlayerTurn)
+        {
+            // Switch to enemy turn
+            combatState = CombatState.EnemyTurn;
+            StartCoroutine(EnemyTurn());
+        }
     }
     
-    private void ReturnToMap()
+    private void EndCombat()
     {
-        // Return to map
+        // Disable action buttons
+        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
+        
+        if (combatState == CombatState.Won)
+        {
+            if (victoryPanel != null) victoryPanel.SetActive(true);
+            
+            // Give rewards
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.GiveRewards(10, 5, 20);
+            }
+        }
+        else if (combatState == CombatState.Lost)
+        {
+            if (gameOverPanel != null) gameOverPanel.SetActive(true);
+        }
+    }
+    
+    public void ReturnToMap()
+    {
         if (GameManager.Instance != null)
         {
             GameManager.Instance.ChangeState(GameState.Map);
         }
     }
-
-    private void GameOver()
-    {
-        SetState(CombatState.GameOver);
-        onGameOver?.Invoke();
-    }
     
-    private void HandleGameOver()
+    public void RestartCombat()
     {
-        // Show game over UI
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(true);
-        }
+        // Clean up
+        if (playerUnit != null) Destroy(playerUnit.gameObject);
+        if (enemyUnit != null) Destroy(enemyUnit.gameObject);
         
-        // Update GameManager state after a delay
-        StartCoroutine(GameOverDelay());
-    }
-    
-    private IEnumerator GameOverDelay()
-    {
-        yield return new WaitForSeconds(2.0f);
+        // Reset UI
+        if (gameOverPanel != null) gameOverPanel.SetActive(false);
+        if (victoryPanel != null) victoryPanel.SetActive(false);
         
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.ChangeState(GameState.GameOver);
-        }
-    }
-    
-    // UI Button methods (to be called from buttons)
-    public void RetryButton()
-    {
-        // Reload combat scene
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.ChangeState(GameState.Combat);
-        }
-    }
-    
-    public void MainMenuButton()
-    {
-        // Return to main menu
-        if (GameManager.Instance != null)
-        {
-            GameManager.Instance.ChangeState(GameState.MainMenu);
-        }
+        // Start new combat
+        Start();
     }
 } 

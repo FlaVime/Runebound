@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 public class CharacterBase : MonoBehaviour {
+    [Header("Identity")]
+    public string unitName = "Character";
+    
     [Header("Stats")]
     public float maxHealth = 100f;
     public float currentHealth;
