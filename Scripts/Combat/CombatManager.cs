@@ -43,7 +43,7 @@ public class CombatManager : MonoBehaviour
     public CombatHUD enemyHUD;
     public GameObject actionButtonsPanel;
     public GameObject gameOverPanel;
-    public GameObject victoryPanel;
+    public GameObject rewardPanel;
     public TMP_Text energyText;
     public Button attackButton;
     public Button defenseButton;
@@ -68,7 +68,7 @@ public class CombatManager : MonoBehaviour
         
         // Hide panels initially
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        if (victoryPanel != null) victoryPanel.SetActive(false);
+        if (rewardPanel != null) rewardPanel.SetActive(false);
     }
     
     void Start()
@@ -374,9 +374,9 @@ public class CombatManager : MonoBehaviour
                 // Use reward system to show reward choices
                 rewardSystem.ShowRewards();
             }
-            else if (victoryPanel != null) 
+            else if (rewardPanel != null) 
             {
-                victoryPanel.SetActive(true);
+                rewardPanel.SetActive(true);
                 
                 // Give rewards directly if no reward system
                 if (GameManager.Instance != null)
@@ -404,7 +404,7 @@ public class CombatManager : MonoBehaviour
     {
         // Hide end game panels
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        if (victoryPanel != null) victoryPanel.SetActive(false);
+        if (rewardPanel != null) rewardPanel.SetActive(false);
         
         // Also hide reward panel if it exists
         if (rewardSystem != null && rewardSystem.rewardPanel != null)

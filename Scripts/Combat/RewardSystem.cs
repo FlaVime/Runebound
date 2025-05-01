@@ -22,9 +22,7 @@ public class RewardSystem : MonoBehaviour
         Souls,
         Health,
         MaxHealth,
-        MaxEnergy,
-        Item,
-        Ability
+        MaxEnergy
     }
 
     [Header("UI References")]
@@ -173,16 +171,6 @@ public class RewardSystem : MonoBehaviour
                 
             case RewardType.MaxEnergy:
                 GameManager.Instance.PlayerData.maxEnergy += reward.value;
-                break;
-                
-            case RewardType.Item:
-                // Add item to inventory - implementation depends on your inventory system
-                Debug.Log("Item reward not implemented: " + reward.rewardName);
-                break;
-                
-            case RewardType.Ability:
-                // Grant new ability - implementation depends on your ability system
-                Debug.Log("Ability reward not implemented: " + reward.rewardName);
                 break;
         }
     }
