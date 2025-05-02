@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeType: Combat
   nodeDescription: A place to fight
-  nodeIcon: {fileID: 0}
+  nodeIcon: {fileID: 21300000, guid: 356560dd6bf561945be8b56be2b90a53, type: 3}

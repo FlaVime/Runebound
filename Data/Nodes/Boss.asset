@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeType: Boss
   nodeDescription: A place to fight boss
-  nodeIcon: {fileID: 0}
+  nodeIcon: {fileID: 21300000, guid: ae2ad7a40f137e442ba9d8fde9f3150c, type: 3}

@@ -69,7 +69,7 @@ public class CombatManager : MonoBehaviour
         // Find RewardSystem if not assigned
         if (rewardSystem == null)
         {
-            rewardSystem = FindObjectOfType<RewardSystem>();
+            rewardSystem = FindFirstObjectByType<RewardSystem>();
             if (rewardSystem == null)
             {
                 Debug.LogError("No RewardSystem found in the scene. Rewards won't work!");

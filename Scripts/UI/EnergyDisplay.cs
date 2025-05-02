@@ -12,7 +12,7 @@ public class EnergyDisplay : MonoBehaviour
     private void Start()
     {
         // Find Combat Manager
-        combatManager = FindObjectOfType<CombatManager>();
+        combatManager = Object.FindFirstObjectByType<CombatManager>();
         if (combatManager == null)
         {
             Debug.LogError("Energy Display: Combat Manager not found!");

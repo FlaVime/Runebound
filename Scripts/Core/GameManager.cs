@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public enum GameState {
     MainMenu,
@@ -39,7 +40,14 @@ public class GameManager : Singleton<GameManager> {
     }
 
     private void Start() {
-        ChangeState(GameState.MainMenu);
+        // Check if we're starting from the main menu
+        if (SceneManager.GetActiveScene().name == "MainMenu") {
+            // Don't load the map yet, wait for player to choose new game or continue
+            ChangeState(GameState.MainMenu);
+        } else {
+            // Coming from another scene, initialize normally
+            LoadGame();
+        }
     }
     
     private void OnEnable()
@@ -92,10 +100,10 @@ public class GameManager : Singleton<GameManager> {
         SaveGame();
         
         // Save map state if in a map scene
-        MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
-        if (mapGenerator != null)
+        MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
+        if (mapSystem != null)
         {
-            mapGenerator.SaveMapState();
+            mapSystem.SaveMapState();
             Debug.Log("Map state saved after giving rewards");
         }
     }
@@ -118,17 +126,18 @@ public class GameManager : Singleton<GameManager> {
     // Save/Load functionality
     public void SaveGame()
     {
+        // Save map state first if available
+        MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
+        if (mapSystem != null)
+        {
+            mapSystem.SaveMapState();
+        }
+        
+        // Then save player data
         string json = JsonUtility.ToJson(playerData);
         PlayerPrefs.SetString("SavedGame", json);
         PlayerPrefs.Save();
         Debug.Log("Game saved. Gold: " + playerData.gold + ", Souls: " + playerData.souls);
-        
-        // Also save map state if available
-        MapGenerator mapGenerator = FindObjectOfType<MapGenerator>();
-        if (mapGenerator != null)
-        {
-            mapGenerator.SaveMapState();
-        }
     }
     
     public void LoadGame()
@@ -157,5 +166,28 @@ public class GameManager : Singleton<GameManager> {
         playerData.Init();
         
         Debug.Log("Game reset. All progress cleared.");
+    }
+
+    // Separate method for starting a new game
+    public void StartNewGame() {
+        Debug.Log("Starting new game - resetting all data");
+        
+        // Clear all previous saves FIRST
+        PlayerPrefs.DeleteKey("SavedGame");
+        PlayerPrefs.DeleteKey("MapSaveData");
+        PlayerPrefs.Save();
+        
+        // Initialize new player data 
+        playerData = new PlayerData();
+        playerData.Init();
+        
+        // Find the map system
+        MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
+        
+        // Change to map scene
+        // This will call the ResetMap on the new instance created in the Map scene
+        ChangeState(GameState.Map);
+        
+        Debug.Log("All saved data cleared, new player data initialized");
     }
 }
