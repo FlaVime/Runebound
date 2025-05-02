@@ -66,6 +66,16 @@ public class CombatManager : MonoBehaviour
             Destroy(gameObject);
         }
         
+        // Find RewardSystem if not assigned
+        if (rewardSystem == null)
+        {
+            rewardSystem = FindObjectOfType<RewardSystem>();
+            if (rewardSystem == null)
+            {
+                Debug.LogError("No RewardSystem found in the scene. Rewards won't work!");
+            }
+        }
+        
         // Hide panels initially
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (rewardPanel != null) rewardPanel.SetActive(false);
@@ -368,21 +378,34 @@ public class CombatManager : MonoBehaviour
         // Show appropriate end game panel
         if (combatState == CombatState.Won)
         {
+            // Add a debug log to check if this part is reached
+            Debug.Log("Victory! Showing rewards");
+            
             // Show victory panel if no reward system exists
             if (rewardSystem != null)
             {
                 // Use reward system to show reward choices
                 rewardSystem.ShowRewards();
+                
+                // Add another debug to see if ShowRewards is called
+                Debug.Log("Called ShowRewards on RewardSystem");
             }
             else if (rewardPanel != null) 
             {
                 rewardPanel.SetActive(true);
+                
+                // Add a debug log
+                Debug.Log("No RewardSystem found, showing basic rewardPanel");
                 
                 // Give rewards directly if no reward system
                 if (GameManager.Instance != null)
                 {
                     GameManager.Instance.GiveRewards(10, 5, 20);
                 }
+            }
+            else
+            {
+                Debug.LogError("No reward system or reward panel found! Player won't see any victory UI.");
             }
         }
         else if (combatState == CombatState.Lost)
