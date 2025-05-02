@@ -2625,6 +2625,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ba647a60bfc85845805aa57479d4e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData:
+    maxHealth: 100
+    currentHealth: 100
+    maxEnergy: 3
+    energy: 3
+    gold: 0
+    souls: 0
+    baseDamage: 10
+    baseDefense: 1
+    onHealthChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    onGoldChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    onSoulsChanged:
+      m_PersistentCalls:
+        m_Calls: []
+    onEnergyChanged:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!4 &1392990059
 Transform:
   m_ObjectHideFlags: 0
@@ -4120,9 +4141,9 @@ RectTransform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 330955668}
   - {fileID: 1223824623}
   - {fileID: 493992785}
   - {fileID: 784212352}
-  - {fileID: 330955668}
   - {fileID: 1392990059}
   - {fileID: 1263330428}

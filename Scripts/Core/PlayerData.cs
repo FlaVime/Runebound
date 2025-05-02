@@ -13,25 +13,15 @@ public class PlayerData
     public int gold;
     public int souls;
     
-    // Equipment and items
-    public int[] equippedItems = new int[3]; // Array of item IDs
-    public int[] inventory = new int[10]; // Array of item IDs
-    
     // Combat stats
     public float baseDamage = 10f;
     public float baseDefense = 1f;
-    
-    // Progression
-    public int level = 1;
-    public int experience = 0;
-    public int experienceToNextLevel = 100;
     
     // Events
     public UnityEvent<int> onHealthChanged = new UnityEvent<int>();
     public UnityEvent<int> onGoldChanged = new UnityEvent<int>();
     public UnityEvent<int> onSoulsChanged = new UnityEvent<int>();
     public UnityEvent<int> onEnergyChanged = new UnityEvent<int>();
-    public UnityEvent<int> onLevelUp = new UnityEvent<int>();
     
     public PlayerData()
     {
@@ -79,30 +69,5 @@ public class PlayerData
     {
         energy = Mathf.Max(0, energy - amount);
         onEnergyChanged?.Invoke(energy);
-    }
-    
-    public void AddExperience(int amount)
-    {
-        experience += amount;
-        
-        // Check for level up
-        if (experience >= experienceToNextLevel)
-        {
-            LevelUp();
-        }
-    }
-    
-    private void LevelUp()
-    {
-        level++;
-        experience -= experienceToNextLevel;
-        experienceToNextLevel = (int)(experienceToNextLevel * 1.5f);
-        
-        // Increase stats
-        maxHealth += 10;
-        currentHealth = maxHealth;
-        baseDamage += 2f;
-        
-        onLevelUp?.Invoke(level);
     }
 } 
