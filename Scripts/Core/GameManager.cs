@@ -175,17 +175,22 @@ public class GameManager : Singleton<GameManager> {
         // Clear all previous saves FIRST
         PlayerPrefs.DeleteKey("SavedGame");
         PlayerPrefs.DeleteKey("MapSaveData");
+        PlayerPrefs.DeleteKey("VisitedNodeIndices");
         PlayerPrefs.Save();
         
         // Initialize new player data 
         playerData = new PlayerData();
         playerData.Init();
         
-        // Find the map system
+        // First check if we're already in the Map scene
         MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
+        if (mapSystem != null) {
+            // If we're already in the Map scene, reset the map directly
+            mapSystem.ResetMap();
+            Debug.Log("Map reset directly in current scene");
+        }
         
         // Change to map scene
-        // This will call the ResetMap on the new instance created in the Map scene
         ChangeState(GameState.Map);
         
         Debug.Log("All saved data cleared, new player data initialized");
