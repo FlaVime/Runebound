@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeType: Shop
   nodeDescription: A place to buy and upgrade
-  nodeIcon: {fileID: 0}
+  nodeIcon: {fileID: 6521567286427641033, guid: 8a026a21d34839c41b84e58fc4968396, type: 3}

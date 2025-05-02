@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 using TMPro;
+using System;
 
 public class RewardSystem : MonoBehaviour
 {
@@ -299,6 +301,20 @@ public class RewardSystem : MonoBehaviour
         if (rewardPanel != null)
         {
             rewardPanel.SetActive(false);
+        }
+        
+        // CRITICAL: Ensure map progress is saved before returning to the map
+        // Let the MapSystem handle everything via its API instead of manually editing PlayerPrefs
+        MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
+        if (mapSystem != null)
+        {
+            // Force save the map state to ensure current node is marked visited
+            mapSystem.SaveMapState();
+            Debug.Log("Forced map state save before returning to map");
+        }
+        else
+        {
+            Debug.LogWarning("Could not find MapSystem to save map state!");
         }
         
         // Return to map

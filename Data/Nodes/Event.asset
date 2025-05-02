@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeType: Event
   nodeDescription: A place to catch event
-  nodeIcon: {fileID: 0}
+  nodeIcon: {fileID: 21300000, guid: 2eec64cea89ea034a8cd12d113d9c5bf, type: 3}
