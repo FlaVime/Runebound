@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class PlayerData
@@ -17,6 +18,9 @@ public class PlayerData
     public float baseDamage = 10f;
     public float baseDefense = 1f;
     
+    // Store IDs of purchased upgrades
+    public List<string> purchasedUpgrades = new List<string>();
+    
     // Events
     public UnityEvent<int> onHealthChanged = new UnityEvent<int>();
     public UnityEvent<int> onGoldChanged = new UnityEvent<int>();
@@ -33,6 +37,9 @@ public class PlayerData
     {
         currentHealth = maxHealth;
         energy = maxEnergy;
+        gold = 100; // Starting gold
+        souls = 20; // Starting souls
+        purchasedUpgrades.Clear();
     }
     
     public void AddGold(int amount)
@@ -69,5 +76,18 @@ public class PlayerData
     {
         energy = Mathf.Max(0, energy - amount);
         onEnergyChanged?.Invoke(energy);
+    }
+    
+    public bool HasUpgrade(string upgradeId)
+    {
+        return purchasedUpgrades.Contains(upgradeId);
+    }
+    
+    public void AddUpgrade(string upgradeId)
+    {
+        if (!purchasedUpgrades.Contains(upgradeId))
+        {
+            purchasedUpgrades.Add(upgradeId);
+        }
     }
 } 
