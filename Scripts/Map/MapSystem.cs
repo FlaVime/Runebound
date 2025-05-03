@@ -60,7 +60,7 @@ public class MapSystem : MonoBehaviour
         
         // Create level 2 nodes
         CreateNode(3, "Combat", new Vector2(-3, -2 + yOffset));
-        CreateNode(4, "Rest", new Vector2(-1, -2 + yOffset));
+        CreateNode(4, "Event", new Vector2(-1, -2 + yOffset));
         CreateNode(5, "Combat", new Vector2(1, -2 + yOffset));
         CreateNode(6, "Event", new Vector2(3, -2 + yOffset));
         

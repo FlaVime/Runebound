@@ -102,6 +102,16 @@ public class CombatManager : MonoBehaviour
         // Spawn player character
         GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
         playerUnit = playerGO.GetComponent<CharacterBase>();
+        
+        // IMPORTANT: Initialize player health from PlayerData if available
+        if (GameManager.Instance != null)
+        {
+            // Calculate health percentage from player data and apply to combat unit
+            float healthPercentage = (float)GameManager.Instance.PlayerData.currentHealth / GameManager.Instance.PlayerData.maxHealth;
+            playerUnit.currentHealth = playerUnit.maxHealth * healthPercentage;
+            
+            Debug.Log($"Combat started. Loading player health: {GameManager.Instance.PlayerData.currentHealth}/{GameManager.Instance.PlayerData.maxHealth} → {playerUnit.currentHealth}/{playerUnit.maxHealth}");
+        }
 
         // Spawn enemy character
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
@@ -109,6 +119,7 @@ public class CombatManager : MonoBehaviour
 
         // Setup UI
         playerHUD.SetHUD(playerUnit);
+        playerHUD.SetHealth(playerUnit.currentHealth);
         enemyHUD.SetHUD(enemyUnit);
         
         // Subscribe to health change events
@@ -341,6 +352,24 @@ public class CombatManager : MonoBehaviour
     {
         // Short delay before hiding characters
         yield return new WaitForSeconds(0.5f);
+        
+        // IMPORTANT: Save player's current health to the PlayerData before ending combat
+        if (GameManager.Instance != null && playerUnit != null)
+        {
+            // Calculate health as percentage and apply to player data
+            int playerHealthValue = Mathf.RoundToInt((playerUnit.currentHealth / playerUnit.maxHealth) * GameManager.Instance.PlayerData.maxHealth);
+            
+            // Set the player's health directly
+            GameManager.Instance.PlayerData.currentHealth = playerHealthValue;
+            
+            // Fire health changed event to update any UI
+            GameManager.Instance.PlayerData.onHealthChanged?.Invoke(playerHealthValue);
+            
+            // Make sure to save the game to persist the health change
+            GameManager.Instance.SaveGame();
+            
+            Debug.Log($"Combat ended. Saving player health: {playerHealthValue}/{GameManager.Instance.PlayerData.maxHealth}");
+        }
         
         // Hide individual characters if they exist
         if (playerUnit != null && playerUnit.gameObject != null)

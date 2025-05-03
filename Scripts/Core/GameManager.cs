@@ -8,7 +8,6 @@ public enum GameState {
     Combat,
     Event,
     Shop,
-    Rest,
     Boss,
     GameOver,
     Victory
@@ -137,7 +136,7 @@ public class GameManager : Singleton<GameManager> {
         string json = JsonUtility.ToJson(playerData);
         PlayerPrefs.SetString("SavedGame", json);
         PlayerPrefs.Save();
-        Debug.Log("Game saved. Gold: " + playerData.gold + ", Souls: " + playerData.souls);
+        Debug.Log($"Game saved. Health: {playerData.currentHealth}/{playerData.maxHealth}, Gold: {playerData.gold}, Souls: {playerData.souls}");
     }
     
     public void LoadGame()
