@@ -11,7 +11,6 @@ public enum CombatState
     Start,
     PlayerTurn,
     EnemyTurn,
-    SelectingTarget,
     Won,
     Lost
 }
