@@ -60,7 +60,7 @@ public class MapSystem : MonoBehaviour
         
         // Create level 2 nodes
         CreateNode(3, "Combat", new Vector2(-3, -2 + yOffset));
-        CreateNode(4, "Rest", new Vector2(-1, -2 + yOffset));
+        CreateNode(4, "Event", new Vector2(-1, -2 + yOffset));
         CreateNode(5, "Combat", new Vector2(1, -2 + yOffset));
         CreateNode(6, "Event", new Vector2(3, -2 + yOffset));
         
@@ -325,15 +325,34 @@ public class MapSystem : MonoBehaviour
     {
         try
         {
-            // Always generate the map structure first
-            GenerateMap();
+            // Check if we need to generate a fresh map
+            bool needsFreshMap = !PlayerPrefs.HasKey("MapSaveData");
             
-            // If there's no saved data, we'll keep the fresh map
-            if (!PlayerPrefs.HasKey("MapSaveData"))
+            if (needsFreshMap)
             {
-                Debug.Log("No map save data found, using fresh map");
-                return true; // Return true since we've already generated a map
+                Debug.Log("No map save data found, generating a fresh map");
+                ClearMap();
+                GenerateMap();
+                
+                // Initialize with node 0 selected
+                currentNodeId = 0;
+                saveData = new MapSaveData();
+                saveData.currentNodeId = 0;
+                saveData.unlockedNodeIds.Add(0);
+                
+                // Make sure node 0 is unlocked
+                if (nodeModels.Count > 0)
+                {
+                    nodeModels[0].isUnlocked = true;
+                }
+                
+                // Save this initial state
+                SaveMapState();
+                return true;
             }
+            
+            // If we have save data, load the map structure first
+            GenerateMap();
             
             // Load the saved map state
             string json = PlayerPrefs.GetString("MapSaveData");

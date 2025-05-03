@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5da72d8f1a71814ea864bee94bbc212, type: 3}
+  m_Name: Event3
+  m_EditorClassIdentifier: 
+  eventId: boar_spa
+  title: Hot Tub Boar
+  description: "You stumble upon a small hot spring. \nA wild boar is already in
+    it, wearing a towel on its head and humming\r"
+  eventImage: {fileID: 21300000, guid: 7f0e93d7bf331b34b80d3a2cada8e676, type: 3}
+  choices:
+  - choiceText: Join the boar
+    resultText: 
+    goldChange: 0
+    soulsChange: 0
+    healthChange: 0
+    hasRandomOutcome: 1
+    successChance: 60
+    successText: The boar nods approvingly. You soak together in peace. Your muscles
+      feel lighter
+    failureText: The boar grunts angrily and launches out of the spring, hitting
+      you with a wet slap
+    successGoldChange: 0
+    successSoulsChange: 0
+    successHealthChange: 10
+    failureGoldChange: 0
+    failureSoulsChange: 0
+    failureHealthChange: -5
+  - choiceText: Steal the towel
+    resultText: "You swipe the towel and dash. The boar squeals in indignation. You
+      find a few coins in the folds \u2014 but your socks are soaked and will never
+      feel dry again"
+    goldChange: 10
+    soulsChange: 0
+    healthChange: 0
+    hasRandomOutcome: 0
+    successChance: 0
+    successText: 
+    failureText: 
+    successGoldChange: 0
+    successSoulsChange: 0
+    successHealthChange: 0
+    failureGoldChange: 0
+    failureSoulsChange: 0
+    failureHealthChange: 0
+  weight: 1
+  oneTimeOnly: 0

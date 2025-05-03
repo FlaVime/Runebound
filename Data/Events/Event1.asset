@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5da72d8f1a71814ea864bee94bbc212, type: 3}
+  m_Name: Event1
+  m_EditorClassIdentifier: 
+  eventId: wolf_pants_theft
+  title: Missing Underwear
+  description: 'You wake up and realize your underwear is gone.
+
+    Wolf tracks
+    lead into the woods. Go after him?'
+  eventImage: {fileID: 21300000, guid: 56e130b3fb575fd488c7c79cfc62d429, type: 3}
+  choices:
+  - choiceText: Chase the wolf
+    resultText: 
+    goldChange: 0
+    soulsChange: 0
+    healthChange: 0
+    hasRandomOutcome: 1
+    successChance: 60
+    successText: You find the wolf. He returns the underwear and gives you a soul.
+    failureText: "It\u2019s a shapeshifter with dental issues. He bites you."
+    successGoldChange: 0
+    successSoulsChange: 10
+    successHealthChange: 0
+    failureGoldChange: 0
+    failureSoulsChange: 0
+    failureHealthChange: -5
+  - choiceText: Let it go
+    resultText: You accept your fate. True strength comes from within.
+    goldChange: 0
+    soulsChange: 5
+    healthChange: 0
+    hasRandomOutcome: 0
+    successChance: 0
+    successText: 
+    failureText: 
+    successGoldChange: 0
+    successSoulsChange: 0
+    successHealthChange: 0
+    failureGoldChange: 0
+    failureSoulsChange: 0
+    failureHealthChange: 0
+  weight: 3
+  oneTimeOnly: 1
