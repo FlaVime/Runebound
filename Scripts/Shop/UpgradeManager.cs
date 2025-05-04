@@ -56,29 +56,20 @@ public class UpgradeManager : MonoBehaviour
         var playerData = GameManager.Instance.PlayerData;
 
         if (playerData.HasUpgrade(HEALTH_UPGRADE))
-        {
             DisableUpgradeButton(upgradeSlots[0]);
-        }
 
         if (playerData.HasUpgrade(DAMAGE_UPGRADE))
-        {
             DisableUpgradeButton(upgradeSlots[1]);
-        }
 
         if (playerData.HasUpgrade(DEFENSE_UPGRADE))
-        {
             DisableUpgradeButton(upgradeSlots[2]);
-        }
     }
 
     private void DisableUpgradeButton(ShopItem item)
     {
         item.buyButton.interactable = false;
         
-        // Optional: Change text to show it's purchased
         if (item.itemPrice != null)
-        {
             item.itemPrice.text = "PURCHASED";
-        }
     }
 } 

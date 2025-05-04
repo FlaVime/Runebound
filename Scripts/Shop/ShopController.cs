@@ -59,10 +59,7 @@ public class ShopController : MonoBehaviour
     
     public void ExitShop()
     {
-        // Save game
         GameManager.Instance.SaveGame();
-        
-        // Return to map
         SceneManager.LoadScene("Map");
     }
 } 
