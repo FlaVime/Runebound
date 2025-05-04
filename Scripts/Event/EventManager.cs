@@ -2,54 +2,45 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 
-// EventManager - main class that handles event display and player choices
 public class EventManager : MonoBehaviour
 {
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI titleText;       // Event title text
-    [SerializeField] private TextMeshProUGUI descriptionText; // Event description text
-    [SerializeField] private Image eventImage;                // Event image
-    [SerializeField] private Button[] choiceButtons;          // Choice buttons
-    [SerializeField] private TextMeshProUGUI[] choiceTexts;   // Choice button texts
-    [SerializeField] private Button continueButton;           // Continue button (to return to map)
+    [SerializeField] private TextMeshProUGUI titleText;
+    [SerializeField] private TextMeshProUGUI descriptionText;
+    [SerializeField] private Image eventImage;
+    [SerializeField] private Button[] choiceButtons;
+    [SerializeField] private TextMeshProUGUI[] choiceTexts;
+    [SerializeField] private Button continueButton;
     
     [Header("Event Settings")]
-    [SerializeField] private EventData[] availableEvents;     // Array of all available events
-    [SerializeField] private bool useWeightedSelection = true;// Use weighted random selection
+    [SerializeField] private EventData[] availableEvents;
+    [SerializeField] private bool useWeightedSelection = true;
     
-    private EventData currentEvent;                           // Currently displayed event
-    private PlayerData playerData;                            // Reference to player data
+    private EventData currentEvent;
+    private PlayerData playerData;
     
-    // Initialize on start
     private void Start()
     {
-        // Get reference to player data
         playerData = GameManager.Instance.PlayerData;
         
-        // Hide continue button initially
         if (continueButton != null)
         {
             continueButton.gameObject.SetActive(false);
             continueButton.onClick.AddListener(ReturnToMap);
         }
         
-        // Show a random event
         ShowRandomEvent();
     }
     
-    // Show a random event from available events
     private void ShowRandomEvent()
     {
         if (availableEvents.Length == 0)
         {
-            Debug.LogError("No available events!");
             ReturnToMap();
             return;
         }
         
-        // Create a list of available events, filtering one-time events
         List<EventData> validEvents = new List<EventData>();
         foreach (EventData eventData in availableEvents)
         {
@@ -64,17 +55,12 @@ public class EventManager : MonoBehaviour
         
         // If no valid events remain, use all events as fallback
         if (validEvents.Count == 0)
-        {
-            Debug.LogWarning("No valid events found. Using all events as fallback.");
             validEvents.AddRange(availableEvents);
-        }
         
-        // Select event randomly
         EventData selectedEvent;
         
         if (useWeightedSelection && validEvents.Count > 1)
         {
-            // Weighted random selection (events with higher weight appear more frequently)
             int totalWeight = 0;
             foreach (var eventData in validEvents)
             {
@@ -98,16 +84,13 @@ public class EventManager : MonoBehaviour
         }
         else
         {
-            // Simple random selection
             int randomIndex = Random.Range(0, validEvents.Count);
             selectedEvent = validEvents[randomIndex];
         }
         
-        // Show the selected event
         ShowEvent(selectedEvent);
     }
     
-    // Display specific event
     private void ShowEvent(EventData eventData)
     {
         currentEvent = eventData;
@@ -123,9 +106,7 @@ public class EventManager : MonoBehaviour
             eventImage.gameObject.SetActive(true);
         }
         else
-        {
             eventImage.gameObject.SetActive(false);
-        }
         
         // Set up choice buttons
         SetupChoiceButtons(eventData);
@@ -138,14 +119,10 @@ public class EventManager : MonoBehaviour
         }
     }
     
-    // Set up choice buttons
     private void SetupChoiceButtons(EventData eventData)
     {
-        // First hide all buttons
         foreach (Button button in choiceButtons)
-        {
             button.gameObject.SetActive(false);
-        }
         
         // Set up buttons for each choice
         for (int i = 0; i < eventData.choices.Length && i < choiceButtons.Length; i++)
@@ -155,7 +132,6 @@ public class EventManager : MonoBehaviour
             
             int choiceIndex = i; // Save index for use in lambda expression
             
-            // Clear previous listeners and add new one
             choiceButtons[i].onClick.RemoveAllListeners();
             choiceButtons[i].onClick.AddListener(() => HandleChoice(choiceIndex));
         }
@@ -207,55 +183,19 @@ public class EventManager : MonoBehaviour
                 soulsChange = choice.failureSoulsChange;
                 healthChange = choice.failureHealthChange;
             }
-            
-            Debug.Log($"Random outcome check: rolled {roll}, needed {choice.successChance} or less, result: {(success ? "success" : "failure")}");
         }
         
-        // Update description text with result
         descriptionText.text = resultText;
         
         // Apply rewards and effects
-        // Gold
-        if (goldChange != 0)
-        {
-            playerData.AddGold(goldChange);
-            Debug.Log($"Gold change: {(goldChange > 0 ? "+" : "")}{goldChange}, total: {playerData.gold}");
-        }
+        GameManager.Instance.ApplyEventOutcome(goldChange, soulsChange, healthChange);
         
-        // Souls
-        if (soulsChange != 0)
-        {
-            playerData.AddSouls(soulsChange);
-            Debug.Log($"Souls change: {(soulsChange > 0 ? "+" : "")}{soulsChange}, total: {playerData.souls}");
-        }
-        
-        // Health
-        if (healthChange != 0)
-        {
-            if (healthChange > 0)
-                playerData.Heal(healthChange);
-            else
-                playerData.TakeDamage(-healthChange);
-                
-            Debug.Log($"Health change: {(healthChange > 0 ? "+" : "")}{healthChange}, total: {playerData.currentHealth}/{playerData.maxHealth}");
-        }
-        
-        // Save game state
-        GameManager.Instance.SaveGame();
-        
-        // Show continue button
         if (continueButton != null)
-        {
             continueButton.gameObject.SetActive(true);
-        }
     }
     
-    // Return to map
     private void ReturnToMap()
     {
-        // Use SceneManager to return to the map scene
-        SceneManager.LoadScene("Map");
-        // Or alternatively use GameManager if you prefer that approach:
-        // GameManager.Instance.ChangeState(GameState.Map);
+        GameManager.Instance.ChangeState(GameState.Map);
     }
 } 

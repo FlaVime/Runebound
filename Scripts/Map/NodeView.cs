@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class NodeView : MonoBehaviour
 {
@@ -31,24 +30,16 @@ public class NodeView : MonoBehaviour
     public void UpdateVisuals()
     {
         if (model.isVisited)
-        {
             spriteRenderer.color = visitedColor;
-        }
         else if (model.isUnlocked)
-        {
             spriteRenderer.color = unlockedColor;
-        }
         else
-        {
             spriteRenderer.color = lockedColor;
-        }
     }
     
     public void SetNodeType(NodeData data)
     {
         if (data != null && data.nodeIcon != null && spriteRenderer != null)
-        {
             spriteRenderer.sprite = data.nodeIcon;
-        }
     }
 }

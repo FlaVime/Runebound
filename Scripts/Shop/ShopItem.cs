@@ -43,14 +43,11 @@ public class ShopItem : MonoBehaviour
         this.currency = currency;
         this.onPurchase = onBuy;
 
-        // Set price text
         itemPrice.text = price.ToString();
 
         // Set currency icon
         if (currencyIcon != null)
-        {
             currencyIcon.sprite = currency == CurrencyType.Gold ? goldIcon : soulsIcon;
-        }
 
         // Initial button state
         UpdateBuyButtonState();
@@ -78,10 +75,6 @@ public class ShopItem : MonoBehaviour
                 data.AddSouls(-price);
 
             onPurchase?.Invoke();
-        }
-        else
-        {
-            Debug.Log("Not enough currency!");
         }
     }
 }

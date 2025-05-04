@@ -14,10 +14,7 @@ public class EnergyDisplay : MonoBehaviour
         // Find Combat Manager
         combatManager = Object.FindFirstObjectByType<CombatManager>();
         if (combatManager == null)
-        {
-            Debug.LogError("Energy Display: Combat Manager not found!");
             return;
-        }
         
         // Initialize text
         UpdateEnergyDisplay(combatManager.currentEnergy);
@@ -35,8 +32,6 @@ public class EnergyDisplay : MonoBehaviour
     private void UpdateEnergyDisplay(int currentEnergy)
     {
         if (energyText != null)
-        {
             energyText.text = currentEnergy.ToString() + " / " + combatManager.maxEnergy.ToString();
-        }
     }
 } 

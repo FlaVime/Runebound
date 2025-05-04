@@ -15,11 +15,10 @@ public class CharacterBase : MonoBehaviour {
 
     protected virtual void Start()
     {
-        // Only initialize health if it hasn't been set yet
         if (currentHealth <= 0)
-        {
             currentHealth = maxHealth;
-        }
+
+        onHealthChanged?.Invoke(currentHealth / maxHealth);
     }
 
     public virtual void TakeDamage(float damage)
@@ -29,9 +28,7 @@ public class CharacterBase : MonoBehaviour {
         onHealthChanged?.Invoke(currentHealth / maxHealth);
 
         if (currentHealth <= 0)
-        {
             Die();
-        }
     }
 
     public virtual void Heal(float amount)
@@ -44,6 +41,12 @@ public class CharacterBase : MonoBehaviour {
     {
         defenseMultiplier = multiplier;
     }
+
+    public virtual void ResetDefenseMultiplier()
+    {
+        defenseMultiplier = 1f;
+    }
+
 
     protected virtual void Die()
     {
