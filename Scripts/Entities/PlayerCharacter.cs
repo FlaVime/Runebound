@@ -9,8 +9,8 @@ public class PlayerCharacter : CharacterBase {
     public UnityEvent<int> onGoldChanged = new UnityEvent<int>();
     public UnityEvent<int> onSoulsChanged = new UnityEvent<int>();
     
-    public int gold;  // Золото игрока
-    public int souls; // Души игрока
+    public int gold;  // player gold
+    public int souls; // player souls
 
     protected override void Start()
     {
@@ -83,6 +83,4 @@ public class PlayerCharacter : CharacterBase {
             playerData.onSoulsChanged.RemoveListener(UpdateSouls);
         }
     }
-
-    // Можно переопределить методы, если нужно что-то особенное
 }

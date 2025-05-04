@@ -685,11 +685,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 3229476995483032917, guid: cb7b590cc9fe5bb4ba4693ff8d5f3022, type: 3}
-  enemyPrefabs:
-  - {fileID: 8014832668684980208, guid: 74cd6bf403d74c44f9f844d003c473ea, type: 3}
-  - {fileID: 2992650708704813625, guid: afec534cb5a55214b903c638587a9ef6, type: 3}
-  - {fileID: 8885506607796221428, guid: d8311a4f89b09e64aa164e6af56a4d82, type: 3}
-  defaultEnemyPrefab: {fileID: 0}
+  enemyPrefabs: []
+  defaultEnemyPrefab: {fileID: 4134726336431747389, guid: 498e10d527aded2489194f4db5c8023e, type: 3}
   playerBattleStation: {fileID: 349230099}
   enemyBattleStation: {fileID: 1564177039}
   maxEnergy: 3
@@ -706,14 +703,14 @@ MonoBehaviour:
   actionButtonsPanel: {fileID: 803902618}
   rewardPanel: {fileID: 483154395}
   gameOverPanel: {fileID: 1431960512}
-  victoryPanel: {fileID: 0}
+  victoryPanel: {fileID: 2138228534}
   energyText: {fileID: 214780958}
   attackButton: {fileID: 556873984}
   defenseButton: {fileID: 1090055984}
   abilityButton: {fileID: 930898967}
   combatArea: {fileID: 1271663099}
   backgroundManager: {fileID: 0}
-  rewardSystem: {fileID: 1310016743}
+  rewardSystem: {fileID: 0}
   combatState: 0
 --- !u!4 &183669746
 Transform:
@@ -5578,19 +5575,7 @@ MonoBehaviour:
   - {fileID: 1546714158}
   - {fileID: 1101154211}
   - {fileID: 592621967}
-  possibleRewards:
-  - rewardName: Gold
-    icon: {fileID: -2446744727746141505, guid: 87553ae9780e9f8489e836a80d471475, type: 3}
-    type: 0
-    value: 25
-  - rewardName: Souls
-    icon: {fileID: 3636765450789175911, guid: 76b4a422a4e106b449c4a88e493f99f2, type: 3}
-    type: 1
-    value: 15
-  - rewardName: Health
-    icon: {fileID: 898861052554268572, guid: b9f4e53d6797d26479c9f871d40f95b8, type: 3}
-    type: 2
-    value: 10
+  possibleRewards: []
   rewardsToChoose: 3
   goldIcon: {fileID: -2446744727746141505, guid: 87553ae9780e9f8489e836a80d471475, type: 3}
   soulsIcon: {fileID: 3636765450789175911, guid: 76b4a422a4e106b449c4a88e493f99f2, type: 3}
@@ -8263,6 +8248,7 @@ GameObject:
   - component: {fileID: 2138228535}
   - component: {fileID: 2138228537}
   - component: {fileID: 2138228536}
+  - component: {fileID: 2138228538}
   m_Layer: 5
   m_Name: VictoryPanel
   m_TagString: Untagged
@@ -8331,6 +8317,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2138228534}
   m_CullTransparentMesh: 1
+--- !u!114 &2138228538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2138228534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b44e185f1c09134c83bacf9df7571fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  againButton: {fileID: 1297511865}
+  exitButton: {fileID: 996457833}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

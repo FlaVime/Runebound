@@ -14,14 +14,11 @@ public class PlayerData
     public int gold;
     public int souls;
     
-    // Combat stats
-    public float baseDamage = 10f;
+    public float baseDamage = 15f;
     public float baseDefense = 1f;
     
-    // Store IDs of purchased upgrades
     public List<string> purchasedUpgrades = new List<string>();
     
-    // Events
     public UnityEvent<int> onHealthChanged = new UnityEvent<int>();
     public UnityEvent<int> onGoldChanged = new UnityEvent<int>();
     public UnityEvent<int> onSoulsChanged = new UnityEvent<int>();
@@ -89,5 +86,32 @@ public class PlayerData
         {
             purchasedUpgrades.Add(upgradeId);
         }
+    }
+
+    public void ApplyReward(RewardSystem.Reward reward)
+    {
+        switch (reward.type)
+        {
+            case RewardSystem.RewardType.Gold: AddGold(reward.value); break;
+            case RewardSystem.RewardType.Souls: AddSouls(reward.value); break;
+            case RewardSystem.RewardType.Health: Heal(reward.value); break;
+            case RewardSystem.RewardType.MaxHealth:
+                maxHealth += reward.value;
+                Heal(reward.value);
+                break;
+            case RewardSystem.RewardType.MaxEnergy:
+                maxEnergy += reward.value;
+                break;
+        }
+    }
+
+    public void HandleDefeat()
+    {
+        gold = Mathf.FloorToInt(gold * 0.6f); // Lose half of gold on defeat
+        souls = Mathf.FloorToInt(souls * 0.6f); // Lose half of souls on defeat
+        currentHealth = maxHealth; // Reset health on defeat
+        energy = maxEnergy; // Reset energy on defeat
+        onGoldChanged?.Invoke(gold);
+        onSoulsChanged?.Invoke(souls);
     }
 } 

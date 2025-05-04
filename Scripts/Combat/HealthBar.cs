@@ -10,51 +10,43 @@ public class HealthBar : MonoBehaviour
     private void Awake()
     {
         slider = GetComponent<Slider>();
-        
-        // Disable slider interactivity
         slider.interactable = false;
     }
 
     public void SetCharacter(CharacterBase character)
     {
+        // Unsubscribe from the previous character's health change event
+        if (this.character != null)
+            this.character.onHealthChanged.RemoveListener(UpdateHealth);
+
         this.character = character;
         
-        // Properly initialize the slider
         if (character != null)
         {
             slider.maxValue = character.maxHealth;
             slider.value = character.currentHealth;
-            
-            // Subscribe to health change events
             character.onHealthChanged.AddListener(UpdateHealth);
         }
     }
 
-    // Update based on health percentage
     private void UpdateHealth(float healthPercent)
     {
-        if (slider != null)
-        {
-            // Convert percentage to absolute value
-            float healthValue = character.maxHealth * healthPercent;
-            slider.value = healthValue;
-        }
+        if (slider == null || character == null) return;
+        
+        float healthValue = character.maxHealth * healthPercent;
+        slider.value = healthValue;
     }
 
-    // Update with absolute health value
     public void SetHealth(float currentHealth)
     {
-        if (slider != null)
-        {
-            slider.value = currentHealth;
-        }
+        if (slider == null) return;
+
+        slider.value = currentHealth;
     }
 
     private void OnDestroy()
     {
         if (character != null)
-        {
             character.onHealthChanged.RemoveListener(UpdateHealth);
-        }
     }
 } 
