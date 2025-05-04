@@ -90,7 +90,7 @@ public class GameManager : Singleton<GameManager> {
     }
     
     // Combat rewards
-    public void GiveRewards(int gold, int souls, int experience)
+    public void GiveRewards(int gold, int souls)
     {
         playerData.AddGold(gold);
         playerData.AddSouls(souls);
@@ -143,9 +143,19 @@ public class GameManager : Singleton<GameManager> {
     {
         if (PlayerPrefs.HasKey("SavedGame"))
         {
+            // Сохраним текущее здоровье для отладки
+            int oldHealth = playerData.currentHealth;
+            
             string json = PlayerPrefs.GetString("SavedGame");
             JsonUtility.FromJsonOverwrite(json, playerData);
-            Debug.Log("Game loaded. Gold: " + playerData.gold + ", Souls: " + playerData.souls);
+            
+            // Проверим, изменилось ли здоровье
+            if (oldHealth != playerData.currentHealth)
+            {
+                Debug.Log($"Health changed after loading save: {oldHealth} -> {playerData.currentHealth}");
+            }
+            
+            Debug.Log("Game loaded. Health: " + playerData.currentHealth + "/" + playerData.maxHealth + ", Gold: " + playerData.gold + ", Souls: " + playerData.souls);
         }
         else
         {

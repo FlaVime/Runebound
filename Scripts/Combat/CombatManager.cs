@@ -11,7 +11,6 @@ public enum CombatState
     Start,
     PlayerTurn,
     EnemyTurn,
-    SelectingTarget,
     Won,
     Lost
 }
@@ -22,13 +21,15 @@ public class CombatManager : MonoBehaviour
 
     [Header("Setup")]
     public GameObject playerPrefab;
-    public GameObject enemyPrefab;
+    public List<GameObject> enemyPrefabs; // List of different enemy prefabs
+    public GameObject defaultEnemyPrefab; // Default enemy if no specific one is provided
     public Transform playerBattleStation;
     public Transform enemyBattleStation;
 
     [Header("Units")]
     CharacterBase playerUnit;
     CharacterBase enemyUnit;
+    private Enemy currentEnemy; // Reference to the current enemy as Enemy class
 
     [Header("Energy Management")]
     public int maxEnergy = 3;
@@ -49,6 +50,9 @@ public class CombatManager : MonoBehaviour
     public Button defenseButton;
     public Button abilityButton;
     public GameObject combatArea; // Parent object containing battle stations and characters
+    
+    [Header("Background")]
+    public BackgroundManager backgroundManager; // link to background manager
     
     [Header("Rewards")]
     public RewardSystem rewardSystem;
@@ -76,6 +80,16 @@ public class CombatManager : MonoBehaviour
             }
         }
         
+        // Find BackgroundManager if not assigned
+        if (backgroundManager == null)
+        {
+            backgroundManager = FindFirstObjectByType<BackgroundManager>();
+            if (backgroundManager == null)
+            {
+                Debug.LogWarning("No BackgroundManager found in the scene. Random backgrounds won't work!");
+            }
+        }
+        
         // Hide panels initially
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (rewardPanel != null) rewardPanel.SetActive(false);
@@ -93,6 +107,12 @@ public class CombatManager : MonoBehaviour
         if (combatArea != null)
         {
             combatArea.SetActive(true);
+        }
+        
+        // Set random background if manager exists
+        if (backgroundManager != null)
+        {
+            backgroundManager.SetRandomBackground();
         }
         
         // Reset energy
@@ -113,14 +133,13 @@ public class CombatManager : MonoBehaviour
             Debug.Log($"Combat started. Loading player health: {GameManager.Instance.PlayerData.currentHealth}/{GameManager.Instance.PlayerData.maxHealth} → {playerUnit.currentHealth}/{playerUnit.maxHealth}");
         }
 
-        // Spawn enemy character
-        GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
-        enemyUnit = enemyGO.GetComponent<CharacterBase>();
-
-        // Setup UI
+        // Setup player UI first
         playerHUD.SetHUD(playerUnit);
         playerHUD.SetHealth(playerUnit.currentHealth);
-        enemyHUD.SetHUD(enemyUnit);
+        
+        // Spawn enemy character from random prefab
+        SpawnRandomEnemy();
+        // Enemy UI is set up in SpawnRandomEnemy method
         
         // Subscribe to health change events
         playerUnit.onHealthChanged.AddListener(OnPlayerHealthChanged);
@@ -128,6 +147,48 @@ public class CombatManager : MonoBehaviour
         
         // Start player turn
         StartCoroutine(StartPlayerTurn());
+    }
+    
+    private void SpawnRandomEnemy()
+    {
+        GameObject enemyPrefab;
+        
+        // Select a random enemy prefab if we have any
+        if (enemyPrefabs != null && enemyPrefabs.Count > 0)
+        {
+            int randomIndex = Random.Range(0, enemyPrefabs.Count);
+            enemyPrefab = enemyPrefabs[randomIndex];
+        }
+        else
+        {
+            // Fallback to default enemy
+            enemyPrefab = defaultEnemyPrefab;
+        }
+        
+        // Create the enemy
+        GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
+        enemyUnit = enemyGO.GetComponent<CharacterBase>();
+        
+        // Try to get the Enemy component if available
+        currentEnemy = enemyGO.GetComponent<Enemy>();
+        
+        // Make sure health is initialized
+        if (enemyUnit.currentHealth <= 0)
+        {
+            enemyUnit.currentHealth = enemyUnit.maxHealth;
+        }
+        
+        // Make sure enemy name is properly set in UI
+        if (enemyHUD != null)
+        {
+            // Setting HUD will also set up the health bar
+            enemyHUD.SetHUD(enemyUnit);
+            
+            // Explicitly update the health bar with current value
+            enemyHUD.SetHealth(enemyUnit.currentHealth);
+            
+            Debug.Log($"Enemy spawned: {enemyUnit.unitName} with health: {enemyUnit.currentHealth}/{enemyUnit.maxHealth}");
+        }
     }
     
     private void OnPlayerHealthChanged(float healthPercent)
@@ -185,19 +246,38 @@ public class CombatManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         
-        // Simple AI - enemy always attacks
-        if (enemyUnit.currentHealth > 0)
+        // Check if we're using the Enemy class and it has TakeTurn functionality
+        if (currentEnemy != null)
         {
-            playerUnit.TakeDamage(enemyUnit.baseDamage);
+            currentEnemy.TakeTurn();
             
-            playerHUD.SetHealth(playerUnit.currentHealth);
-
-            yield return new WaitForSeconds(1f);
-            
-            if (combatState != CombatState.Lost)
+            // If the enemy has special ability and decides to use it
+            if (currentEnemy.enemyData != null && 
+                currentEnemy.enemyData.hasSpecialAbility && 
+                Random.value < currentEnemy.enemyData.specialAbilityChance)
             {
-                StartCoroutine(StartPlayerTurn());
+                // Apply special ability damage
+                playerUnit.TakeDamage(currentEnemy.enemyData.specialAbilityDamage);
             }
+            else
+            {
+                // Regular attack
+                playerUnit.TakeDamage(enemyUnit.baseDamage);
+            }
+        }
+        else
+        {
+            // Fallback to basic attack if not using Enemy class
+            playerUnit.TakeDamage(enemyUnit.baseDamage);
+        }
+        
+        playerHUD.SetHealth(playerUnit.currentHealth);
+
+        yield return new WaitForSeconds(1f);
+        
+        if (combatState != CombatState.Lost)
+        {
+            StartCoroutine(StartPlayerTurn());
         }
     }
     
@@ -357,7 +437,12 @@ public class CombatManager : MonoBehaviour
         if (GameManager.Instance != null && playerUnit != null)
         {
             // Calculate health as percentage and apply to player data
-            int playerHealthValue = Mathf.RoundToInt((playerUnit.currentHealth / playerUnit.maxHealth) * GameManager.Instance.PlayerData.maxHealth);
+            float healthPercentage = (float)playerUnit.currentHealth / playerUnit.maxHealth;
+            int playerHealthValue = Mathf.RoundToInt(healthPercentage * GameManager.Instance.PlayerData.maxHealth);
+            
+            // Add extra checks for debugging
+            Debug.Log($"END COMBAT: Player health calculation: {playerUnit.currentHealth}/{playerUnit.maxHealth} = {healthPercentage:F2} ratio");
+            Debug.Log($"Saving health value: {playerHealthValue} to PlayerData (max: {GameManager.Instance.PlayerData.maxHealth})");
             
             // Set the player's health directly
             GameManager.Instance.PlayerData.currentHealth = playerHealthValue;
@@ -429,7 +514,7 @@ public class CombatManager : MonoBehaviour
                 // Give rewards directly if no reward system
                 if (GameManager.Instance != null)
                 {
-                    GameManager.Instance.GiveRewards(10, 5, 20);
+                    GameManager.Instance.GiveRewards(10, 5);
                 }
             }
             else

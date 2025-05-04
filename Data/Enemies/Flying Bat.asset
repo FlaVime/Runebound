@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0213b0aafc92aa1438226d940813e418, type: 3}
+  m_Name: Flying Bat
+  m_EditorClassIdentifier: 
+  enemyName: Flying Bat
+  enemySprite: {fileID: -955609468180279937, guid: c94668f98964edb44b581cb7b4cb50f4, type: 3}
+  maxHealth: 40
+  baseDamage: 6
+  skipTurnChance: 0.3
+  goldReward: 10
+  soulsReward: 3
+  abilityDescription: 
+  hasSpecialAbility: 0
+  specialAbilityChance: 0.3
+  specialAbilityDamage: 15

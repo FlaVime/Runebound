@@ -119,6 +119,55 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &16973427
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 16973429}
+  - component: {fileID: 16973428}
+  m_Layer: 0
+  m_Name: BGManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &16973428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16973427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a74304c32f1b7e4eb69b38da4ad2291, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backgroundImage: {fileID: 98708190}
+  backgroundSprites:
+  - {fileID: -7105980146719452978, guid: 5b1f06f3e01f2ea4eac7852d1468aa32, type: 3}
+  - {fileID: 21300000, guid: 6bbe33be15e14bb40bca405d634ade7b, type: 3}
+  - {fileID: 2502428880995872514, guid: a8e55afc0c4b68d4683d33298c0305c3, type: 3}
+--- !u!4 &16973429
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16973427}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &32744313
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,7 +685,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 3229476995483032917, guid: cb7b590cc9fe5bb4ba4693ff8d5f3022, type: 3}
-  enemyPrefab: {fileID: 6057873466950789966, guid: cf4f8b5bbcd62bf4b8db2b762f94c573, type: 3}
+  enemyPrefabs:
+  - {fileID: 8014832668684980208, guid: 74cd6bf403d74c44f9f844d003c473ea, type: 3}
+  - {fileID: 2992650708704813625, guid: afec534cb5a55214b903c638587a9ef6, type: 3}
+  - {fileID: 8885506607796221428, guid: d8311a4f89b09e64aa164e6af56a4d82, type: 3}
+  defaultEnemyPrefab: {fileID: 0}
   playerBattleStation: {fileID: 349230099}
   enemyBattleStation: {fileID: 1564177039}
   maxEnergy: 3
@@ -655,7 +708,8 @@ MonoBehaviour:
   defenseButton: {fileID: 1090055984}
   abilityButton: {fileID: 930898967}
   combatArea: {fileID: 1271663099}
-  rewardSystem: {fileID: 0}
+  backgroundManager: {fileID: 0}
+  rewardSystem: {fileID: 1310016743}
   combatState: 0
 --- !u!4 &183669746
 Transform:
@@ -1329,7 +1383,7 @@ Transform:
   m_GameObject: {fileID: 349230098}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -400, y: -300, z: -9719.999}
+  m_LocalPosition: {x: -400, y: -300, z: 0}
   m_LocalScale: {x: 108, y: 108, z: 108}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6058,6 +6112,7 @@ GameObject:
   - component: {fileID: 1431960513}
   - component: {fileID: 1431960515}
   - component: {fileID: 1431960514}
+  - component: {fileID: 1431960516}
   m_Layer: 5
   m_Name: DefeatPanel
   m_TagString: Untagged
@@ -6126,6 +6181,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1431960512}
   m_CullTransparentMesh: 1
+--- !u!114 &1431960516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431960512}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad167e973e48cf14dabacb810ca6b997, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  againButton: {fileID: 1780766225}
+  exitButton: {fileID: 477880656}
 --- !u!1 &1500846911
 GameObject:
   m_ObjectHideFlags: 0
@@ -6460,7 +6529,7 @@ Transform:
   m_GameObject: {fileID: 1564177038}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 400, y: -300, z: -9719.999}
+  m_LocalPosition: {x: 400, y: -300, z: 0}
   m_LocalScale: {x: 108, y: 108, z: 108}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7220,7 +7289,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1780766226}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1780766226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8252,6 +8333,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 183669746}
   - {fileID: 1310016744}
+  - {fileID: 16973429}
   - {fileID: 1618182153}
   - {fileID: 399037751}
   - {fileID: 679309240}

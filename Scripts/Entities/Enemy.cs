@@ -1,64 +1,73 @@
-// using UnityEngine;
-// using UnityEngine.Events;
+using UnityEngine;
+using UnityEngine.Events;
 
-// public class Enemy : CharacterBase
-// {
-//     [Header("AI Settings")]
-//     [Range(0f, 1f)]
-//     public float skipTurnChance = 0.2f;
+public class Enemy : CharacterBase
+{
+    [Header("Enemy Data")]
+    public EnemyData enemyData;
     
-//     [Header("Rewards")]
-//     public int goldReward = 10;
-//     public int soulsReward = 5;
-//     public int experienceReward = 20;
+    [Header("AI Settings")]
+    [Range(0f, 1f)]
+    public float skipTurnChance = 0.2f;
     
-//     public UnityEvent<float> onAttackPlayer;
-//     public UnityEvent onEnemyDefeated;
+    [Header("Rewards")]
+    public int goldReward = 10;
+    public int soulsReward = 5;
+    
+    public UnityEvent<float> onAttackPlayer;
+    public UnityEvent onEnemyDefeated;
 
-//     private PlayerController player;
+    private void Awake()
+    {
+        if (enemyData != null)
+        {
+            // Apply data from ScriptableObject
+            unitName = enemyData.enemyName;
+            maxHealth = enemyData.maxHealth;
+            baseDamage = enemyData.baseDamage;
+            skipTurnChance = enemyData.skipTurnChance;
+            goldReward = enemyData.goldReward;
+            soulsReward = enemyData.soulsReward;
+            
+            // Additional logging for debugging
+            Debug.Log($"Enemy initialized with name: {unitName} from data: {enemyData.name}");
+        }
+        else
+        {
+            Debug.LogWarning("Enemy doesn't have EnemyData assigned!");
+        }
+    }
 
-//     protected override void Start()
-//     {
-//         base.Start();
-        
-//         // Find player controller reference
-//         player = FindObjectOfType<PlayerController>();
-//     }
+    protected override void Start()
+    {
+        base.Start();
+    }
 
-//     public void TakeTurn()
-//     {
-//         if (Random.value > skipTurnChance)
-//         {
-//             Attack();
-//         }
-//     }
+    public void TakeTurn()
+    {
+        if (Random.value > skipTurnChance)
+        {
+            Attack();
+        }
+    }
 
-//     private void Attack()
-//     {
-//         if (player != null)
-//         {
-//             // Direct attack on player
-//             player.TakeDamage(baseDamage);
-//         }
-        
-//         // Trigger event for UI or other listeners
-//         onAttackPlayer?.Invoke(baseDamage);
-//     }
+    private void Attack()
+    {
+        // Attack logic is handled by CombatManager
+        onAttackPlayer?.Invoke(baseDamage);
+    }
 
-//     protected override void Die()
-//     {
-//         base.Die();
+    protected override void Die()
+    {
+        base.Die();
         
-//         // Give rewards to player
-//         if (GameManager.Instance != null)
-//         {
-//             GameManager.Instance.GiveRewards(goldReward, soulsReward, experienceReward);
-//         }
+        // Give rewards to player
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GiveRewards(goldReward, soulsReward);
+        }
         
-//         // Trigger event
-//         onEnemyDefeated?.Invoke();
-        
-//         // Deactivate object
-//         gameObject.SetActive(false);
-//     }
-// } 
+        // Trigger event
+        onEnemyDefeated?.Invoke();
+    }
+} 
