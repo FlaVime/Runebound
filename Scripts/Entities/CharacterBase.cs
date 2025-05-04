@@ -15,7 +15,11 @@ public class CharacterBase : MonoBehaviour {
 
     protected virtual void Start()
     {
-        currentHealth = maxHealth;
+        // Only initialize health if it hasn't been set yet
+        if (currentHealth <= 0)
+        {
+            currentHealth = maxHealth;
+        }
     }
 
     public virtual void TakeDamage(float damage)
