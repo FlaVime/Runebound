@@ -20,7 +20,6 @@ public class TopBarResourceDisplay : MonoBehaviour
     
     private void Start()
     {
-        // Get a reference to the player data
         if (GameManager.Instance != null)
         {
             playerData = GameManager.Instance.PlayerData;
@@ -33,7 +32,6 @@ public class TopBarResourceDisplay : MonoBehaviour
                 playerData.onEnergyChanged.AddListener(UpdateEnergyText);
                 playerData.onHealthChanged.AddListener(UpdateHealthText);
                 
-                // Initial update
                 UpdateAllResources();
             }
         }
@@ -41,7 +39,6 @@ public class TopBarResourceDisplay : MonoBehaviour
     
     private void OnDestroy()
     {
-        // Unsubscribe from events when this object is destroyed
         if (playerData != null)
         {
             playerData.onGoldChanged.RemoveListener(UpdateGoldText);
@@ -65,32 +62,24 @@ public class TopBarResourceDisplay : MonoBehaviour
     private void UpdateGoldText(int gold)
     {
         if (goldText != null)
-        {
             goldText.text = goldPrefix + gold.ToString();
-        }
     }
     
     private void UpdateSoulsText(int souls)
     {
         if (soulsText != null)
-        {
             soulsText.text = soulsPrefix + souls.ToString();
-        }
     }
     
     private void UpdateEnergyText(int energy)
     {
         if (energyText != null)
-        {
             energyText.text = energyPrefix + energy.ToString() + "/" + playerData.maxEnergy.ToString();
-        }
     }
     
     private void UpdateHealthText(int health)
     {
         if (healthText != null)
-        {
             healthText.text = healthPrefix + health.ToString() + "/" + playerData.maxHealth.ToString();
-        }
     }
 } 

@@ -1,13 +1,12 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    public GameObject mainMenu; // Reference to the main menu GameObject
-    public GameObject optionsMenu; // Reference to the options menu GameObject
+    public GameObject mainMenu;
+    public GameObject optionsMenu;
     
-    public Button continueButton; // Reference to continue button (if it exists)
+    public Button continueButton;
 
     private void Start()
     {
@@ -19,28 +18,33 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    public void NewGame() {
+    public void NewGame() 
+    {
         GameManager.Instance.StartNewGame();
     }
     
-    public void ContinueGame() {
+    public void ContinueGame() 
+    {
         GameManager.Instance.ContinueGame();
     }
 
-    public void Options() {
+    public void Options() 
+    {
         if (optionsMenu != null) optionsMenu.SetActive(true);
         if (mainMenu != null) mainMenu.SetActive(false);
     }
 
-    public void BackToMain() {
+    public void BackToMain() 
+    {
         if (optionsMenu != null) optionsMenu.SetActive(false);
         if (mainMenu != null) mainMenu.SetActive(true);
     }
 
-    public void ExitGame() {
+    public void ExitGame() 
+    {
         Application.Quit();
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false; // для выхода в редакторе
+        UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }
 }
