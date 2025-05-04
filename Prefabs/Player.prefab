@@ -48,7 +48,7 @@ MonoBehaviour:
   unitName: Knight
   maxHealth: 100
   currentHealth: 100
-  baseDamage: 15
+  baseDamage: 150
   onHealthChanged:
     m_PersistentCalls:
       m_Calls: []

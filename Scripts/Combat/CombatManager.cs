@@ -45,6 +45,7 @@ public class CombatManager : MonoBehaviour
     public GameObject actionButtonsPanel;
     public GameObject gameOverPanel;
     public GameObject rewardPanel;
+    public GameObject victoryPanel;   // Панель победы для босса
     public TMP_Text energyText;
     public Button attackButton;
     public Button defenseButton;
@@ -93,6 +94,7 @@ public class CombatManager : MonoBehaviour
         // Hide panels initially
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (rewardPanel != null) rewardPanel.SetActive(false);
+        if (victoryPanel != null) victoryPanel.SetActive(false);
     }
     
     void Start()
@@ -489,37 +491,49 @@ public class CombatManager : MonoBehaviour
         if (enemyHUD != null && enemyHUD.gameObject != null)
             enemyHUD.gameObject.SetActive(false);
         
+        // Check if enemy is a boss
+        bool isBossFight = currentEnemy != null && currentEnemy is BossEnemy;
+        
         // Show appropriate end game panel
         if (combatState == CombatState.Won)
         {
-            // Add a debug log to check if this part is reached
-            Debug.Log("Victory! Showing rewards");
-            
-            // Show victory panel if no reward system exists
-            if (rewardSystem != null)
+            // For boss fight, show victory panel
+            if (isBossFight && victoryPanel != null)
             {
-                // Use reward system to show reward choices
-                rewardSystem.ShowRewards();
+                Debug.Log("Boss defeated! Showing victory panel");
                 
-                // Add another debug to see if ShowRewards is called
-                Debug.Log("Called ShowRewards on RewardSystem");
+                // Show the victory panel
+                victoryPanel.SetActive(true);
             }
-            else if (rewardPanel != null) 
-            {
-                rewardPanel.SetActive(true);
-                
-                // Add a debug log
-                Debug.Log("No RewardSystem found, showing basic rewardPanel");
-                
-                // Give rewards directly if no reward system
-                if (GameManager.Instance != null)
-                {
-                    GameManager.Instance.GiveRewards(10, 5);
-                }
-            }
+            // For regular enemies, show rewards
             else
             {
-                Debug.LogError("No reward system or reward panel found! Player won't see any victory UI.");
+                Debug.Log("Victory! Showing rewards");
+                
+                // Show victory panel if no reward system exists
+                if (rewardSystem != null)
+                {
+                    // Use reward system to show reward choices
+                    rewardSystem.ShowRewards();
+                    
+                    Debug.Log("Called ShowRewards on RewardSystem");
+                }
+                else if (rewardPanel != null) 
+                {
+                    rewardPanel.SetActive(true);
+                    
+                    Debug.Log("No RewardSystem found, showing basic rewardPanel");
+                    
+                    // Give rewards directly if no reward system
+                    if (GameManager.Instance != null)
+                    {
+                        GameManager.Instance.GiveRewards(10, 5);
+                    }
+                }
+                else
+                {
+                    Debug.LogError("No reward system or reward panel found! Player won't see any victory UI.");
+                }
             }
         }
         else if (combatState == CombatState.Lost)
@@ -542,6 +556,7 @@ public class CombatManager : MonoBehaviour
         // Hide end game panels
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (rewardPanel != null) rewardPanel.SetActive(false);
+        if (victoryPanel != null) victoryPanel.SetActive(false);
         
         // Also hide reward panel if it exists
         if (rewardSystem != null && rewardSystem.rewardPanel != null)

@@ -15,7 +15,7 @@ public class PlayerData
     public int souls;
     
     // Combat stats
-    public float baseDamage = 10f;
+    public float baseDamage = 15f;
     public float baseDefense = 1f;
     
     // Store IDs of purchased upgrades
