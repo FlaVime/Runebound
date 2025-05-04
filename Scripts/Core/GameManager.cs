@@ -166,4 +166,19 @@ public class GameManager : Singleton<GameManager> {
         SceneManager.LoadScene("Map");
     }
 
+    public void ApplyEventOutcome(int gold, int souls, int health)
+    {
+        if (gold != 0)
+            playerData.AddGold(gold);
+
+        if (souls != 0)
+            playerData.AddSouls(souls);
+
+        if (health > 0)
+            playerData.Heal(health);
+        else if (health < 0)
+            playerData.TakeDamage(-health);
+        
+        SaveGame();
+    }
 }
