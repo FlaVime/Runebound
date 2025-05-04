@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 
@@ -39,21 +37,27 @@ public class CombatManager : MonoBehaviour
     public int abilityCost = 2;
     public int energyPerTurn = 1;
     
+    [Header("Multipliers")]
+    public float abilityDamageMultiplier = 1.5f;
+    public float defendMultiplier = 0.5f;
+    public float skipMultiplier = 1.5f;
+
+
     [Header("UI")]
     public CombatHUD playerHUD;
     public CombatHUD enemyHUD;
     public GameObject actionButtonsPanel;
-    public GameObject gameOverPanel;
     public GameObject rewardPanel;
-    public GameObject victoryPanel;   // Панель победы для босса
+    public GameObject gameOverPanel;
+    public GameObject victoryPanel;
     public TMP_Text energyText;
     public Button attackButton;
     public Button defenseButton;
     public Button abilityButton;
-    public GameObject combatArea; // Parent object containing battle stations and characters
+    public GameObject combatArea;
     
     [Header("Background")]
-    public BackgroundManager backgroundManager; // link to background manager
+    public BackgroundManager backgroundManager;
     
     [Header("Rewards")]
     public RewardSystem rewardSystem;
@@ -71,27 +75,13 @@ public class CombatManager : MonoBehaviour
             Destroy(gameObject);
         }
         
-        // Find RewardSystem if not assigned
         if (rewardSystem == null)
         {
             rewardSystem = FindFirstObjectByType<RewardSystem>();
-            if (rewardSystem == null)
-            {
-                Debug.LogError("No RewardSystem found in the scene. Rewards won't work!");
-            }
         }
         
-        // Find BackgroundManager if not assigned
-        if (backgroundManager == null)
-        {
-            backgroundManager = FindFirstObjectByType<BackgroundManager>();
-            if (backgroundManager == null)
-            {
-                Debug.LogWarning("No BackgroundManager found in the scene. Random backgrounds won't work!");
-            }
-        }
+        if (backgroundManager == null) backgroundManager = FindFirstObjectByType<BackgroundManager>();
         
-        // Hide panels initially
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (rewardPanel != null) rewardPanel.SetActive(false);
         if (victoryPanel != null) victoryPanel.SetActive(false);
@@ -105,17 +95,9 @@ public class CombatManager : MonoBehaviour
 
     public void SetupCombat()
     {
-        // Show combat area if it exists
-        if (combatArea != null)
-        {
-            combatArea.SetActive(true);
-        }
+        if (combatArea != null) combatArea.SetActive(true);
         
-        // Set random background if manager exists
-        if (backgroundManager != null)
-        {
-            backgroundManager.SetRandomBackground();
-        }
+        if (backgroundManager != null) backgroundManager.SetRandomBackground();        
         
         // Reset energy
         currentEnergy = maxEnergy;
@@ -125,23 +107,16 @@ public class CombatManager : MonoBehaviour
         GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
         playerUnit = playerGO.GetComponent<CharacterBase>();
         
-        // IMPORTANT: Initialize player health from PlayerData if available
         if (GameManager.Instance != null)
         {
-            // Calculate health percentage from player data and apply to combat unit
             float healthPercentage = (float)GameManager.Instance.PlayerData.currentHealth / GameManager.Instance.PlayerData.maxHealth;
             playerUnit.currentHealth = playerUnit.maxHealth * healthPercentage;
-            
-            Debug.Log($"Combat started. Loading player health: {GameManager.Instance.PlayerData.currentHealth}/{GameManager.Instance.PlayerData.maxHealth} → {playerUnit.currentHealth}/{playerUnit.maxHealth}");
         }
 
-        // Setup player UI first
         playerHUD.SetHUD(playerUnit);
         playerHUD.SetHealth(playerUnit.currentHealth);
         
-        // Spawn enemy character from random prefab
         SpawnRandomEnemy();
-        // Enemy UI is set up in SpawnRandomEnemy method
         
         // Subscribe to health change events
         playerUnit.onHealthChanged.AddListener(OnPlayerHealthChanged);
@@ -155,17 +130,12 @@ public class CombatManager : MonoBehaviour
     {
         GameObject enemyPrefab;
         
-        // Select a random enemy prefab if we have any
         if (enemyPrefabs != null && enemyPrefabs.Count > 0)
         {
             int randomIndex = Random.Range(0, enemyPrefabs.Count);
             enemyPrefab = enemyPrefabs[randomIndex];
         }
-        else
-        {
-            // Fallback to default enemy
-            enemyPrefab = defaultEnemyPrefab;
-        }
+        else enemyPrefab = defaultEnemyPrefab;
         
         // Create the enemy
         GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
@@ -188,8 +158,6 @@ public class CombatManager : MonoBehaviour
             
             // Explicitly update the health bar with current value
             enemyHUD.SetHealth(enemyUnit.currentHealth);
-            
-            Debug.Log($"Enemy spawned: {enemyUnit.unitName} with health: {enemyUnit.currentHealth}/{enemyUnit.maxHealth}");
         }
     }
     
@@ -220,10 +188,8 @@ public class CombatManager : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         combatState = CombatState.PlayerTurn;
         
-        // Add energy at the start of each turn
         AddEnergy(energyPerTurn);
         
-        // Enable action buttons panel
         if (actionButtonsPanel != null) 
         {
             actionButtonsPanel.SetActive(true);
@@ -248,7 +214,6 @@ public class CombatManager : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         
-        // Check if we're using the Enemy class and it has TakeTurn functionality
         if (currentEnemy != null)
         {
             currentEnemy.TakeTurn();
@@ -303,11 +268,7 @@ public class CombatManager : MonoBehaviour
     
     private void UpdateEnergyDisplay()
     {
-        if (energyText != null)
-        {
-            energyText.text = currentEnergy.ToString() + " / " + maxEnergy.ToString();
-        }
-        
+        if (energyText != null) energyText.text = currentEnergy.ToString() + " / " + maxEnergy.ToString();
         UpdateButtonInteractivity();
     }
     
@@ -347,142 +308,88 @@ public class CombatManager : MonoBehaviour
         StartCoroutine(PlayerSkip());
     }
     
-    private IEnumerator PlayerAttack()
+    private IEnumerator ExecutePlayerAction(System.Action action)
     {
-        // Disable action buttons during attack
         if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
         
-        enemyUnit.TakeDamage(playerUnit.baseDamage);
+        action?.Invoke();
         
-        enemyHUD.SetHealth(enemyUnit.currentHealth);
-
         yield return new WaitForSeconds(1f);
         
         if (combatState == CombatState.PlayerTurn)
         {
-            // Switch to enemy turn
             combatState = CombatState.EnemyTurn;
             StartCoroutine(EnemyTurn());
         }
+    }
+
+
+    private IEnumerator PlayerAttack()
+    {
+        yield return ExecutePlayerAction(() =>
+        {
+            enemyUnit.TakeDamage(playerUnit.baseDamage);
+            enemyHUD.SetHealth(enemyUnit.currentHealth);
+        });
     }
     
     private IEnumerator PlayerDefend()
     {
-        // Disable action buttons during defend
-        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
-        
-        playerUnit.SetDefenseMultiplier(0.5f); // Take half damage
-        
-        yield return new WaitForSeconds(1f);
-        
-        if (combatState == CombatState.PlayerTurn)
+        yield return ExecutePlayerAction(() =>
         {
-            // Switch to enemy turn
-            combatState = CombatState.EnemyTurn;
-            StartCoroutine(EnemyTurn());
-        }
+            playerUnit.SetDefenseMultiplier(defendMultiplier);
+        });
     }
     
     private IEnumerator PlayerAbility()
     {
-        // Disable action buttons during ability
-        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
-        
-        enemyUnit.TakeDamage(playerUnit.baseDamage * 1.5f);
-        
-        enemyHUD.SetHealth(enemyUnit.currentHealth);
-
-        yield return new WaitForSeconds(1f);
-        
-        if (combatState == CombatState.PlayerTurn)
+        yield return ExecutePlayerAction(() =>
         {
-            // Switch to enemy turn
-            combatState = CombatState.EnemyTurn;
-            StartCoroutine(EnemyTurn());
-        }
+            enemyUnit.TakeDamage(playerUnit.baseDamage * abilityDamageMultiplier);
+            enemyHUD.SetHealth(enemyUnit.currentHealth);
+        });
     }
     
     private IEnumerator PlayerSkip()
     {
-        // Disable action buttons during skip
-        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
-        
-        playerUnit.SetDefenseMultiplier(1.5f); // Take more damage, but recover
-        
-        playerHUD.SetHealth(playerUnit.currentHealth);
-
-        yield return new WaitForSeconds(1f);
-        
-        if (combatState == CombatState.PlayerTurn)
+        yield return ExecutePlayerAction(() =>
         {
-            // Switch to enemy turn
-            combatState = CombatState.EnemyTurn;
-            StartCoroutine(EnemyTurn());
-        }
+            playerUnit.SetDefenseMultiplier(skipMultiplier);
+            playerHUD.SetHealth(playerUnit.currentHealth);
+        });
     }
     
     private void EndCombat()
     {
-        // Disable action buttons
-        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false);
-        
-        // Hide combat area to hide characters and battle stations
+        if (actionButtonsPanel != null) actionButtonsPanel.SetActive(false); 
         StartCoroutine(EndCombatSequence());
     }
     
     private IEnumerator EndCombatSequence()
     {
-        // Short delay before hiding characters
         yield return new WaitForSeconds(0.5f);
         
-        // IMPORTANT: Save player's current health to the PlayerData before ending combat
         if (GameManager.Instance != null && playerUnit != null)
         {
-            // Calculate health as percentage and apply to player data
             float healthPercentage = (float)playerUnit.currentHealth / playerUnit.maxHealth;
             int playerHealthValue = Mathf.RoundToInt(healthPercentage * GameManager.Instance.PlayerData.maxHealth);
             
-            // Add extra checks for debugging
-            Debug.Log($"END COMBAT: Player health calculation: {playerUnit.currentHealth}/{playerUnit.maxHealth} = {healthPercentage:F2} ratio");
-            Debug.Log($"Saving health value: {playerHealthValue} to PlayerData (max: {GameManager.Instance.PlayerData.maxHealth})");
-            
-            // Set the player's health directly
             GameManager.Instance.PlayerData.currentHealth = playerHealthValue;
-            
+
             // Fire health changed event to update any UI
             GameManager.Instance.PlayerData.onHealthChanged?.Invoke(playerHealthValue);
             
-            // Make sure to save the game to persist the health change
             GameManager.Instance.SaveGame();
-            
-            Debug.Log($"Combat ended. Saving player health: {playerHealthValue}/{GameManager.Instance.PlayerData.maxHealth}");
         }
         
         // Hide individual characters if they exist
-        if (playerUnit != null && playerUnit.gameObject != null)
-        {
-            playerUnit.gameObject.SetActive(false);
-        }
+        if (playerUnit != null && playerUnit.gameObject != null) playerUnit.gameObject.SetActive(false);
         
-        if (enemyUnit != null && enemyUnit.gameObject != null)
-        {
-            enemyUnit.gameObject.SetActive(false);
-        }
+        if (enemyUnit != null && enemyUnit.gameObject != null) enemyUnit.gameObject.SetActive(false);
         
         // Hide battle stations if using a combat area parent
         if (combatArea != null)
-        {
             combatArea.SetActive(false);
-        }
-        else
-        {
-            // If no combat area exists, try to hide the battle stations directly
-            if (playerBattleStation != null && playerBattleStation.gameObject != null)
-                playerBattleStation.gameObject.SetActive(false);
-                
-            if (enemyBattleStation != null && enemyBattleStation.gameObject != null)
-                enemyBattleStation.gameObject.SetActive(false);
-        }
         
         // Hide HUD elements
         if (playerHUD != null && playerHUD.gameObject != null)
@@ -500,39 +407,15 @@ public class CombatManager : MonoBehaviour
             // For boss fight, show victory panel
             if (isBossFight && victoryPanel != null)
             {
-                Debug.Log("Boss defeated! Showing victory panel");
-                
                 // Show the victory panel
                 victoryPanel.SetActive(true);
             }
             // For regular enemies, show rewards
             else
             {
-                Debug.Log("Victory! Showing rewards");
-                
-                // Show victory panel if no reward system exists
                 if (rewardSystem != null)
                 {
-                    // Use reward system to show reward choices
                     rewardSystem.ShowRewards();
-                    
-                    Debug.Log("Called ShowRewards on RewardSystem");
-                }
-                else if (rewardPanel != null) 
-                {
-                    rewardPanel.SetActive(true);
-                    
-                    Debug.Log("No RewardSystem found, showing basic rewardPanel");
-                    
-                    // Give rewards directly if no reward system
-                    if (GameManager.Instance != null)
-                    {
-                        GameManager.Instance.GiveRewards(10, 5);
-                    }
-                }
-                else
-                {
-                    Debug.LogError("No reward system or reward panel found! Player won't see any victory UI.");
                 }
             }
         }
@@ -559,10 +442,8 @@ public class CombatManager : MonoBehaviour
         if (victoryPanel != null) victoryPanel.SetActive(false);
         
         // Also hide reward panel if it exists
-        if (rewardSystem != null && rewardSystem.rewardPanel != null)
-        {
+        if (rewardSystem != null && rewardSystem.rewardPanel != null) 
             rewardSystem.rewardPanel.SetActive(false);
-        }
         
         // Show HUD elements
         if (playerHUD != null && playerHUD.gameObject != null)
@@ -575,7 +456,6 @@ public class CombatManager : MonoBehaviour
         if (playerUnit != null) Destroy(playerUnit.gameObject);
         if (enemyUnit != null) Destroy(enemyUnit.gameObject);
         
-        // Start new combat
         Start();
     }
 } 

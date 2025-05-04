@@ -8,13 +8,11 @@ public class VictoryPanelController : MonoBehaviour
     
     private void OnEnable()
     {
-        // Setup when panel is enabled
         SetupButtons();
     }
     
     private void SetupButtons()
     {
-        // Настройка кнопок
         if (againButton != null)
             againButton.onClick.AddListener(OnAgainButtonClick);
         
@@ -24,20 +22,14 @@ public class VictoryPanelController : MonoBehaviour
     
     private void OnAgainButtonClick()
     {
-        // Запуск новой игры с сохранением ресурсов
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.StartNewGame();
-        }
     }
     
     private void OnExitButtonClick()
     {
-        // Возврат в главное меню
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.ChangeState(GameState.MainMenu);
-        }
     }
     
     private void OnDisable()

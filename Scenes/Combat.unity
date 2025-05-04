@@ -698,11 +698,15 @@ MonoBehaviour:
   defenseEnergyCost: 1
   abilityCost: 3
   energyPerTurn: 1
+  abilityDamageMultiplier: 1.5
+  defendMultiplier: 0.5
+  skipMultiplier: 1.5
   playerHUD: {fileID: 125102211}
   enemyHUD: {fileID: 1526647759}
   actionButtonsPanel: {fileID: 803902618}
-  gameOverPanel: {fileID: 1431960512}
   rewardPanel: {fileID: 483154395}
+  gameOverPanel: {fileID: 1431960512}
+  victoryPanel: {fileID: 0}
   energyText: {fileID: 214780958}
   attackButton: {fileID: 556873984}
   defenseButton: {fileID: 1090055984}
@@ -5574,7 +5578,19 @@ MonoBehaviour:
   - {fileID: 1546714158}
   - {fileID: 1101154211}
   - {fileID: 592621967}
-  possibleRewards: []
+  possibleRewards:
+  - rewardName: Gold
+    icon: {fileID: -2446744727746141505, guid: 87553ae9780e9f8489e836a80d471475, type: 3}
+    type: 0
+    value: 25
+  - rewardName: Souls
+    icon: {fileID: 3636765450789175911, guid: 76b4a422a4e106b449c4a88e493f99f2, type: 3}
+    type: 1
+    value: 15
+  - rewardName: Health
+    icon: {fileID: 898861052554268572, guid: b9f4e53d6797d26479c9f871d40f95b8, type: 3}
+    type: 2
+    value: 10
   rewardsToChoose: 3
   goldIcon: {fileID: -2446744727746141505, guid: 87553ae9780e9f8489e836a80d471475, type: 3}
   soulsIcon: {fileID: 3636765450789175911, guid: 76b4a422a4e106b449c4a88e493f99f2, type: 3}
@@ -6193,7 +6209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad167e973e48cf14dabacb810ca6b997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  againButton: {fileID: 1780766225}
+  restartButton: {fileID: 0}
   exitButton: {fileID: 477880656}
 --- !u!1 &1500846911
 GameObject:

@@ -87,4 +87,21 @@ public class PlayerData
             purchasedUpgrades.Add(upgradeId);
         }
     }
+
+    public void ApplyReward(RewardSystem.Reward reward)
+    {
+        switch (reward.type)
+        {
+            case RewardSystem.RewardType.Gold: AddGold(reward.value); break;
+            case RewardSystem.RewardType.Souls: AddSouls(reward.value); break;
+            case RewardSystem.RewardType.Health: Heal(reward.value); break;
+            case RewardSystem.RewardType.MaxHealth:
+                maxHealth += reward.value;
+                Heal(reward.value);
+                break;
+            case RewardSystem.RewardType.MaxEnergy:
+                maxEnergy += reward.value;
+                break;
+        }
+    }
 } 
