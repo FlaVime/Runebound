@@ -60,21 +60,18 @@ public class PlayerCharacter : CharacterBase {
     
     public override void TakeDamage(float damage)
     {
-        base.TakeDamage(damage);
-        // Sync with PlayerData
-        playerData.TakeDamage((int)damage);
+        float actualDamage = damage * defenseMultiplier;
+        playerData.TakeDamage(Mathf.RoundToInt(actualDamage));
     }
     
     public override void Heal(float amount)
     {
         base.Heal(amount);
-        // Sync with PlayerData
         playerData.Heal((int)amount);
     }
     
     private void OnDestroy()
     {
-        // Unsubscribe from events to prevent memory leaks
         if (playerData != null)
         {
             playerData.onHealthChanged.RemoveListener(UpdateHealth);

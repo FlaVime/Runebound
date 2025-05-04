@@ -28,13 +28,6 @@ public class Enemy : CharacterBase
             skipTurnChance = enemyData.skipTurnChance;
             goldReward = enemyData.goldReward;
             soulsReward = enemyData.soulsReward;
-            
-            // Additional logging for debugging
-            Debug.Log($"Enemy initialized with name: {unitName} from data: {enemyData.name}");
-        }
-        else
-        {
-            Debug.LogWarning("Enemy doesn't have EnemyData assigned!");
         }
     }
 
@@ -63,11 +56,9 @@ public class Enemy : CharacterBase
         
         // Give rewards to player
         if (GameManager.Instance != null)
-        {
             GameManager.Instance.GiveRewards(goldReward, soulsReward);
-        }
         
-        // Trigger event
         onEnemyDefeated?.Invoke();
+        Destroy(gameObject);
     }
 } 
