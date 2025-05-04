@@ -134,7 +134,8 @@ public class GameManager : Singleton<GameManager> {
         playerData.Init();
     }
 
-    public void StartNewGame() {
+    public void StartNewGame() 
+    {
         PlayerPrefs.DeleteKey("SavedGame");
         PlayerPrefs.DeleteKey("MapSaveData");
         PlayerPrefs.DeleteKey("VisitedNodeIndices");
@@ -142,10 +143,27 @@ public class GameManager : Singleton<GameManager> {
         
         playerData = new PlayerData();
         playerData.Init();
-        
-        MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
-        if (mapSystem != null) mapSystem.ResetMap();
-        
-        ChangeState(GameState.Map);
+
+        SaveGame();
+
+        SceneManager.LoadScene("Map");
     }
+
+    public void ContinueGame() 
+    {
+        LoadGame();
+        SceneManager.LoadScene("Map");
+    }
+
+    public void RestartAfterDefeat() 
+    {
+        PlayerPrefs.DeleteKey("MapSaveData");
+        PlayerPrefs.DeleteKey("CurrentNodeIndex");
+        PlayerPrefs.DeleteKey("VisitedNodeIndices");
+        PlayerPrefs.Save();
+
+        SaveGame();
+        SceneManager.LoadScene("Map");
+    }
+
 }

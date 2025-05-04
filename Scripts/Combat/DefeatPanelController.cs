@@ -19,7 +19,7 @@ public class DefeatPanelController : MonoBehaviour
     private void OnrestartButtonClick()
     {
         if (GameManager.Instance != null)
-            GameManager.Instance.StartNewGame();
+            GameManager.Instance.RestartAfterDefeat();
     }
     
     private void OnExitButtonClick()

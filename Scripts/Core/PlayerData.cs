@@ -104,4 +104,14 @@ public class PlayerData
                 break;
         }
     }
+
+    public void HandleDefeat()
+    {
+        gold = Mathf.FloorToInt(gold * 0.6f); // Lose half of gold on defeat
+        souls = Mathf.FloorToInt(souls * 0.6f); // Lose half of souls on defeat
+        currentHealth = maxHealth; // Reset health on defeat
+        energy = maxEnergy; // Reset energy on defeat
+        onGoldChanged?.Invoke(gold);
+        onSoulsChanged?.Invoke(souls);
+    }
 } 

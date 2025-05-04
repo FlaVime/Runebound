@@ -20,14 +20,11 @@ public class MainMenuController : MonoBehaviour
     }
 
     public void NewGame() {
-        // Reset game and go to map using the proper new game method
         GameManager.Instance.StartNewGame();
     }
     
     public void ContinueGame() {
-        // Load saved game and continue
-        GameManager.Instance.LoadGame();
-        GameManager.Instance.ChangeState(GameState.Map);
+        GameManager.Instance.ContinueGame();
     }
 
     public void Options() {

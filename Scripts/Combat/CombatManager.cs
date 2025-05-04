@@ -421,8 +421,12 @@ public class CombatManager : MonoBehaviour
         }
         else if (combatState == CombatState.Lost)
         {
-            if (gameOverPanel != null) 
+            if (gameOverPanel != null)
+            {
+                GameManager.Instance?.PlayerData?.HandleDefeat();
+                GameManager.Instance?.SaveGame();
                 gameOverPanel.SetActive(true);
+            }
         }
     }
     
