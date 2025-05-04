@@ -14,14 +14,11 @@ public class PlayerData
     public int gold;
     public int souls;
     
-    // Combat stats
     public float baseDamage = 15f;
     public float baseDefense = 1f;
     
-    // Store IDs of purchased upgrades
     public List<string> purchasedUpgrades = new List<string>();
     
-    // Events
     public UnityEvent<int> onHealthChanged = new UnityEvent<int>();
     public UnityEvent<int> onGoldChanged = new UnityEvent<int>();
     public UnityEvent<int> onSoulsChanged = new UnityEvent<int>();
