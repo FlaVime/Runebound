@@ -778,9 +778,9 @@ MonoBehaviour:
   itemDescription: {fileID: 373445308421519039}
   itemPrice: {fileID: 2219697475342213358}
   buyButton: {fileID: 3330301435450113240}
-  currencyIcon: {fileID: 0}
-  goldIcon: {fileID: 0}
-  soulsIcon: {fileID: 0}
+  currencyIcon: {fileID: 8837517080391869613}
+  goldIcon: {fileID: -2446744727746141505, guid: 87553ae9780e9f8489e836a80d471475, type: 3}
+  soulsIcon: {fileID: 3636765450789175911, guid: 76b4a422a4e106b449c4a88e493f99f2, type: 3}
   currency: 0
   price: 0
 --- !u!1 &7038237606828970792

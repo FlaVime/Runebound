@@ -35,7 +35,7 @@ public class PlayerData
         currentHealth = maxHealth;
         energy = maxEnergy;
         gold = 100; // Starting gold
-        souls = 20; // Starting souls
+        souls = 200; // Starting souls
         purchasedUpgrades.Clear();
     }
     

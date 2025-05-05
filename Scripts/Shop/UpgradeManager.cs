@@ -5,13 +5,14 @@ public class UpgradeManager : MonoBehaviour
     public Sprite healthIcon;
     public Sprite damageIcon;
     public Sprite defenseIcon;
+    public Sprite energyIcon;
 
     public ShopItem[] upgradeSlots;
 
-    // Upgrade IDs
     private const string HEALTH_UPGRADE = "max_health";
     private const string DAMAGE_UPGRADE = "damage_boost";  
     private const string DEFENSE_UPGRADE = "defense_boost";
+    private const string ENERGY_UPGRADE = "max_energy";
 
     private void Start()
     {
@@ -21,55 +22,50 @@ public class UpgradeManager : MonoBehaviour
     private void InitializeUpgrades()
     {
         var playerData = GameManager.Instance.PlayerData;
+        var upgrades = DatabaseManager.Instance.LoadUpgrades();
 
-        // Health upgrade
-        upgradeSlots[0].Init("Max Health +20", "Permanently increase max HP", healthIcon, 50, ShopItem.CurrencyType.Souls, () =>
+        for (int i = 0; i < upgradeSlots.Length && i < upgrades.Count; i++)
         {
-            playerData.maxHealth += 20;
-            playerData.Heal(20); // Also heal to show the effect
-            playerData.AddUpgrade(HEALTH_UPGRADE);
-            DisableUpgradeButton(upgradeSlots[0]);
-        });
+            var upgradeData = upgrades[i];
+            ShopItem.CurrencyType currencyType = upgradeData.currency == "Gold" ? ShopItem.CurrencyType.Gold : ShopItem.CurrencyType.Souls;
 
-        // Damage upgrade
-        upgradeSlots[1].Init("Base Damage +2", "Increase your attack power", damageIcon, 75, ShopItem.CurrencyType.Souls, () =>
-        {
-            playerData.baseDamage += 2;
-            playerData.AddUpgrade(DAMAGE_UPGRADE);
-            DisableUpgradeButton(upgradeSlots[1]);
-        });
-
-        // Defense upgrade
-        upgradeSlots[2].Init("Defense +1", "Reduce damage taken", defenseIcon, 60, ShopItem.CurrencyType.Souls, () =>
-        {
-            playerData.baseDefense += 1;
-            playerData.AddUpgrade(DEFENSE_UPGRADE);
-            DisableUpgradeButton(upgradeSlots[2]);
-        });
-
-        // Check if upgrades are already purchased
-        CheckPurchasedUpgrades();
+            upgradeSlots[i].Init(upgradeData.upgradeName, upgradeData.upgradeDescription, GetIconByID(upgradeData.upgradeID), upgradeData.price, currencyType, () =>
+            {
+                ApplyUpgradeEffect(upgradeData.upgradeID);
+                playerData.AddUpgrade(upgradeData.upgradeID);
+            });
+        }
     }
 
-    private void CheckPurchasedUpgrades()
+    private Sprite GetIconByID(string upgradeID)
+    {
+        if (upgradeID == HEALTH_UPGRADE) return healthIcon;
+        if (upgradeID == DAMAGE_UPGRADE) return damageIcon;
+        if (upgradeID == DEFENSE_UPGRADE) return defenseIcon;
+        if (upgradeID == ENERGY_UPGRADE) return energyIcon;
+        return null; // Default icon or handle error
+    }
+
+    private void ApplyUpgradeEffect(string upgradeID)
     {
         var playerData = GameManager.Instance.PlayerData;
 
-        if (playerData.HasUpgrade(HEALTH_UPGRADE))
-            DisableUpgradeButton(upgradeSlots[0]);
-
-        if (playerData.HasUpgrade(DAMAGE_UPGRADE))
-            DisableUpgradeButton(upgradeSlots[1]);
-
-        if (playerData.HasUpgrade(DEFENSE_UPGRADE))
-            DisableUpgradeButton(upgradeSlots[2]);
-    }
-
-    private void DisableUpgradeButton(ShopItem item)
-    {
-        item.buyButton.interactable = false;
-        
-        if (item.itemPrice != null)
-            item.itemPrice.text = "PURCHASED";
+        switch (upgradeID)
+        {
+            case "max_health":
+                playerData.maxHealth += 20;
+                playerData.Heal(20);
+                break;
+            case "damage_boost":
+                playerData.baseDamage += 2;
+                break;
+            case "defense_boost":
+                playerData.baseDefense += 1;
+                break;
+            case "max_energy":
+                playerData.maxEnergy += 1;
+                playerData.AddEnergy(1);
+                break;
+        }
     }
 } 
