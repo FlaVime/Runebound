@@ -52,4 +52,24 @@ public class DatabaseManager : MonoBehaviour
             return upgrades.Select(u => u.upgradeID).ToList();
         }
     }
+
+    public void SaveShopItems(List<ShopItemData> items)
+    {
+        using (var connection = new SQLiteConnection(dbPath))
+        {
+            connection.CreateTable<ShopItemData>();
+            
+            foreach (var item in items)
+                connection.InsertOrReplace(item);
+        }
+    }
+
+    public List<ShopItemData> LoadShopItems()
+    {
+        using (var connection = new SQLiteConnection(dbPath))
+        {
+            connection.CreateTable<ShopItemData>();
+            return connection.Table<ShopItemData>().ToList();
+        }
+    }
 }
