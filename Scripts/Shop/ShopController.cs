@@ -15,7 +15,6 @@ public class ShopController : MonoBehaviour
     public Button upgradeButton;
     public TextMeshProUGUI goldText;
     public TextMeshProUGUI soulsText;
-    public TextMeshProUGUI runesText;
     
     [Header("Managers")]
     public ShopManager shopManager;
