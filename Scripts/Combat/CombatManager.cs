@@ -109,8 +109,17 @@ public class CombatManager : MonoBehaviour
         
         if (GameManager.Instance != null)
         {
-            float healthPercentage = (float)GameManager.Instance.PlayerData.currentHealth / GameManager.Instance.PlayerData.maxHealth;
-            playerUnit.currentHealth = playerUnit.maxHealth * healthPercentage;
+            var playerData = GameManager.Instance.PlayerData;
+
+            if (playerUnit is PlayerCharacter playerCharacter)
+            {
+                playerCharacter.maxHealth = playerData.maxHealth;
+                playerCharacter.currentHealth = playerData.currentHealth;
+                playerCharacter.baseDamage = playerData.baseDamage;
+            }
+
+            maxEnergy = playerData.maxEnergy;
+            currentEnergy = playerData.energy;
         }
 
         playerHUD.SetHUD(playerUnit);

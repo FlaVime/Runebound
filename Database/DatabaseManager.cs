@@ -72,4 +72,13 @@ public class DatabaseManager : MonoBehaviour
             return connection.Table<ShopItemData>().ToList();
         }
     }
+
+    public List<UpgradeData> LoadUpgrades()
+    {
+        using (var connection = new SQLiteConnection(dbPath))
+        {
+            connection.CreateTable<UpgradeData>();
+            return connection.Table<UpgradeData>().ToList();
+        }
+    }
 }
