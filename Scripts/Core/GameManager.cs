@@ -113,6 +113,8 @@ public class GameManager : Singleton<GameManager> {
         string json = JsonUtility.ToJson(playerData);
         PlayerPrefs.SetString("SavedGame", json);
         PlayerPrefs.Save();
+
+        DatabaseManager.Instance.SavePlayerUpgrade(playerData.purchasedUpgrades);
     }
     
     public void LoadGame()
@@ -120,7 +122,9 @@ public class GameManager : Singleton<GameManager> {
         if (PlayerPrefs.HasKey("SavedGame"))
         {            
             string json = PlayerPrefs.GetString("SavedGame");
-            JsonUtility.FromJsonOverwrite(json, playerData);            
+            JsonUtility.FromJsonOverwrite(json, playerData);
+
+            playerData.purchasedUpgrades = DatabaseManager.Instance.LoadPlayerUpgrade();
         }
     }
     
