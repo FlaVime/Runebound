@@ -133,10 +133,12 @@ public class GameManager : Singleton<GameManager> {
             string backupPath = System.IO.Path.Combine(Application.persistentDataPath, "BackupSavedGame.json");
             System.IO.File.WriteAllText(backupPath, json);
             Debug.Log("Game backup created at: " + backupPath);
+            GameLogger.Log("Game backup created");
         }
         else
         {
             Debug.LogWarning("No game data to backup.");
+            GameLogger.Log("No game data to backup");
         }
     }
     
