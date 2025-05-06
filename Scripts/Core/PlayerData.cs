@@ -102,7 +102,7 @@ public class PlayerData
         int reducedGold = Mathf.RoundToInt(currentGold * 0.6f);
         int reducedSouls = Mathf.RoundToInt(currentSouls * 0.6f);
 
-        Debug.Log($"Gold before defeat: {currentGold}, after: {reducedGold}");
+        GameLogger.Log($"Defeat: Gold {currentGold} -> {reducedGold}, Souls {currentSouls} -> {reducedSouls}");
 
         gold.Set(reducedGold);
         souls.Set(reducedSouls);
