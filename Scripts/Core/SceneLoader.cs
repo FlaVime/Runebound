@@ -1,50 +1,46 @@
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections;
 
-public class SceneLoader : Singleton<SceneLoader> {
+public class SceneLoader : Singleton<SceneLoader>
+{
     public static event Action<string> OnSceneLoaded;
-    
-    protected override void Awake() {
+
+    [Header("Transition Animation")]
+    public Animator transition;
+    public float transitionTime = 2f;
+
+    protected override void Awake()
+    {
         base.Awake();
         DontDestroyOnLoad(gameObject);
-        
         SceneManager.sceneLoaded += OnSceneLoadComplete;
     }
-    
+
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnSceneLoadComplete;
     }
-    
+
     private void OnSceneLoadComplete(Scene scene, LoadSceneMode mode)
     {
         OnSceneLoaded?.Invoke(scene.name);
     }
-    
-    public void Load(string sceneName) {
-        bool sceneExists = false;
-        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+
+    public void Load(string sceneName)
+    {
+        StartCoroutine(LoadSceneWithTransition(sceneName));
+    }
+
+    private IEnumerator LoadSceneWithTransition(string sceneName)
+    {
+        if (transition != null)
         {
-            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
-            string sceneNameFromPath = System.IO.Path.GetFileNameWithoutExtension(scenePath);
-            
-            if (sceneNameFromPath == sceneName)
-            {
-                sceneExists = true;
-                break;
-            }
+            transition.SetTrigger("Start");
+            yield return new WaitForSeconds(transitionTime);
         }
-        
-        if (sceneExists)
-        {
-            SceneManager.LoadScene(sceneName);
-        }
-        else
-        {
-            if (GameManager.Instance.CurrentState != GameState.MainMenu && SceneManager.GetSceneByName("MainMenu") != null)
-            {
-                SceneManager.LoadScene("MainMenu");
-            }
-        }
+
+        SceneManager.LoadScene(sceneName);
     }
 }

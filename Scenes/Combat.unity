@@ -3169,14 +3169,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.78431374}
+  m_Color: {r: 0.2264151, g: 0.2264151, b: 0.2264151, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -7105980146719452978, guid: 5b1f06f3e01f2ea4eac7852d1468aa32, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7344,6 +7344,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1780766223}
   m_CullTransparentMesh: 1
+--- !u!1001 &1797200649
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6469850099032443351, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_Name
+      value: RuneSceneLoader
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469850099032443351, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
 --- !u!1 &1797571162
 GameObject:
   m_ObjectHideFlags: 0
@@ -8341,3 +8402,4 @@ SceneRoots:
   - {fileID: 1618182153}
   - {fileID: 399037751}
   - {fileID: 679309240}
+  - {fileID: 1797200649}
