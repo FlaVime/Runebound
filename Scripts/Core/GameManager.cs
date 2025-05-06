@@ -25,9 +25,16 @@ public class GameManager : Singleton<GameManager> {
         base.Awake();
         DontDestroyOnLoad(gameObject);
         
-        LoadGame();
+        if (!PlayerPrefs.HasKey("SavedGame"))
+        {
+            playerData.Init();
+        }
+        else
+        {
+            LoadGame();
+        }
         
-        if (playerData.currentHealth <= 0)
+        if (playerData.currentHealth.Value <= 0)
         {
             playerData.Init();
         }
@@ -147,9 +154,8 @@ public class GameManager : Singleton<GameManager> {
         
         playerData = new PlayerData();
         playerData.Init();
-
+        
         SaveGame();
-
         SceneManager.LoadScene("Map");
     }
 
@@ -167,6 +173,7 @@ public class GameManager : Singleton<GameManager> {
         PlayerPrefs.Save();
 
         SaveGame();
+        playerData.currentHealth.Set(playerData.maxHealth);
         SceneManager.LoadScene("Map");
     }
 
