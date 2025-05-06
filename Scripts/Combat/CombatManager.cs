@@ -63,7 +63,8 @@ public class CombatManager : MonoBehaviour
     public RewardSystem rewardSystem;
 
     public CombatState combatState;
-    
+    private bool defeatHandled = false;
+
     private void Awake()
     {
         if (Instance == null)
@@ -110,16 +111,15 @@ public class CombatManager : MonoBehaviour
         if (GameManager.Instance != null)
         {
             var playerData = GameManager.Instance.PlayerData;
-
+            maxEnergy = playerData.maxEnergy;
+            currentEnergy = playerData.energy;
+            
             if (playerUnit is PlayerCharacter playerCharacter)
             {
                 playerCharacter.maxHealth = playerData.maxHealth;
                 playerCharacter.currentHealth = playerData.currentHealth;
                 playerCharacter.baseDamage = playerData.baseDamage;
             }
-
-            maxEnergy = playerData.maxEnergy;
-            currentEnergy = playerData.energy;
         }
 
         playerHUD.SetHUD(playerUnit);
@@ -393,7 +393,6 @@ public class CombatManager : MonoBehaviour
         
         // Hide individual characters if they exist
         if (playerUnit != null && playerUnit.gameObject != null) playerUnit.gameObject.SetActive(false);
-        
         if (enemyUnit != null && enemyUnit.gameObject != null) enemyUnit.gameObject.SetActive(false);
         
         // Hide battle stations if using a combat area parent
@@ -430,10 +429,13 @@ public class CombatManager : MonoBehaviour
         }
         else if (combatState == CombatState.Lost)
         {
-            if (gameOverPanel != null)
+            if (!defeatHandled && gameOverPanel != null)
             {
+                defeatHandled = true;
+
                 GameManager.Instance?.PlayerData?.HandleDefeat();
                 GameManager.Instance?.SaveGame();
+
                 gameOverPanel.SetActive(true);
             }
         }

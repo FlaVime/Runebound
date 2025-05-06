@@ -6,16 +6,16 @@ using System.Collections.Generic;
 public class PlayerData
 {
     public int maxHealth = 100;
-    public int currentHealth;
+    public ProjectedInt currentHealth;
     
     public int maxEnergy = 3;
-    public int energy;
+    public ProjectedInt energy;
     
-    public int gold;
-    public int souls;
+    public ProjectedInt gold;
+    public ProjectedInt souls;
     
-    public float baseDamage = 15f;
-    public float baseDefense = 1f;
+    public ProjectedFloat baseDamage;
+    public ProjectedFloat baseDefense;
     
     public List<string> purchasedUpgrades = new List<string>();
     
@@ -24,18 +24,14 @@ public class PlayerData
     public UnityEvent<int> onSoulsChanged = new UnityEvent<int>();
     public UnityEvent<int> onEnergyChanged = new UnityEvent<int>();
     
-    public PlayerData()
-    {
-        currentHealth = maxHealth;
-        energy = maxEnergy;
-    }
-    
     public void Init()
     {
-        currentHealth = maxHealth;
-        energy = maxEnergy;
-        gold = 100; // Starting gold
-        souls = 200; // Starting souls
+        gold.Set(100); // Starting gold
+        souls.Set(200); // Starting souls
+        currentHealth.Set(maxHealth);
+        energy.Set(maxEnergy);
+        baseDamage.Set(15f); // Starting base damage
+        baseDefense.Set(1f); // Starting base defense
         purchasedUpgrades.Clear();
     }
     
@@ -95,23 +91,26 @@ public class PlayerData
             case RewardSystem.RewardType.Gold: AddGold(reward.value); break;
             case RewardSystem.RewardType.Souls: AddSouls(reward.value); break;
             case RewardSystem.RewardType.Health: Heal(reward.value); break;
-            case RewardSystem.RewardType.MaxHealth:
-                maxHealth += reward.value;
-                Heal(reward.value);
-                break;
-            case RewardSystem.RewardType.MaxEnergy:
-                maxEnergy += reward.value;
-                break;
         }
     }
 
     public void HandleDefeat()
     {
-        gold = Mathf.FloorToInt(gold * 0.6f); // Lose half of gold on defeat
-        souls = Mathf.FloorToInt(souls * 0.6f); // Lose half of souls on defeat
-        currentHealth = maxHealth; // Reset health on defeat
-        energy = maxEnergy; // Reset energy on defeat
+        int currentGold = gold;
+        int currentSouls = souls;
+
+        int reducedGold = Mathf.RoundToInt(currentGold * 0.6f);
+        int reducedSouls = Mathf.RoundToInt(currentSouls * 0.6f);
+
+        Debug.Log($"Gold before defeat: {currentGold}, after: {reducedGold}");
+
+        gold.Set(reducedGold);
+        souls.Set(reducedSouls);
+
+        currentHealth.Set(maxHealth);
+        energy.Set(maxEnergy);
+
         onGoldChanged?.Invoke(gold);
         onSoulsChanged?.Invoke(souls);
     }
-} 
+}
