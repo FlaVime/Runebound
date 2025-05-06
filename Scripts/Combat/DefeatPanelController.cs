@@ -10,13 +10,13 @@ public class DefeatPanelController : MonoBehaviour
     {
         // Set up button listeners
         if (restartButton != null)
-            restartButton.onClick.AddListener(OnrestartButtonClick);
+            restartButton.onClick.AddListener(OnRestartButtonClick);
         
         if (exitButton != null)
             exitButton.onClick.AddListener(OnExitButtonClick);
     }
     
-    private void OnrestartButtonClick()
+    private void OnRestartButtonClick()
     {
         if (GameManager.Instance != null)
             GameManager.Instance.RestartAfterDefeat();
@@ -32,7 +32,7 @@ public class DefeatPanelController : MonoBehaviour
     {
         // Clean up listeners
         if (restartButton != null)
-            restartButton.onClick.RemoveListener(OnrestartButtonClick);
+            restartButton.onClick.RemoveListener(OnRestartButtonClick);
         
         if (exitButton != null)
             exitButton.onClick.RemoveListener(OnExitButtonClick);

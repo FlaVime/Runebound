@@ -19,8 +19,6 @@ public class EnemyData : ScriptableObject
     public int soulsReward = 5;
     
     [Header("Special Abilities")]
-    [TextArea]
-    public string abilityDescription;
     public bool hasSpecialAbility;
     public float specialAbilityChance = 0.3f;
     public float specialAbilityDamage = 15f;

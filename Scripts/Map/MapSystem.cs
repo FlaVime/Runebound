@@ -412,21 +412,4 @@ public class MapSystem : MonoBehaviour
         }
         connectionLines.Clear();
     }
-    
-    // Delete this method if you don't want to reset the map
-    // public void ResetMap()
-    // {
-    //     ClearMap();
-        
-    //     PlayerPrefs.DeleteKey("MapSaveData");
-        
-    //     currentNodeId = 0; // Start with the first node, not -1
-    //     saveData = new MapSaveData();
-    //     saveData.currentNodeId = 0;
-        
-    //     GenerateMap();
-        
-    //     DrawConnections();
-    //     UpdateNodeStates();
-    // }
 }

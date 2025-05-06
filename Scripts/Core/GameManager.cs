@@ -104,11 +104,6 @@ public class GameManager : Singleton<GameManager> {
         SaveGame();
     }
     
-    private void OnApplicationPause(bool pauseStatus)
-    {
-        if (pauseStatus) SaveGame();
-    }
-    
     public void SaveGame()
     {
         MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
@@ -151,16 +146,6 @@ public class GameManager : Singleton<GameManager> {
 
             playerData.purchasedUpgrades = DatabaseManager.Instance.LoadPlayerUpgrade();
         }
-    }
-    
-    public void ResetGame()
-    {
-        PlayerPrefs.DeleteKey("SavedGame");
-        
-        PlayerPrefs.DeleteKey("CurrentNodeIndex");
-        PlayerPrefs.DeleteKey("VisitedNodeIndices");
-        
-        playerData.Init();
     }
 
     public void StartNewGame() 
