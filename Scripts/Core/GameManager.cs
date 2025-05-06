@@ -120,8 +120,24 @@ public class GameManager : Singleton<GameManager> {
         string json = JsonUtility.ToJson(playerData);
         PlayerPrefs.SetString("SavedGame", json);
         PlayerPrefs.Save();
+        BackupSave();
 
         DatabaseManager.Instance.SavePlayerUpgrade(playerData.purchasedUpgrades);
+    }
+
+    public void BackupSave()
+    {
+        string json = PlayerPrefs.GetString("SavedGame", null);
+        if (!string.IsNullOrEmpty(json))
+        {
+            string backupPath = System.IO.Path.Combine(Application.persistentDataPath, "BackupSavedGame.json");
+            System.IO.File.WriteAllText(backupPath, json);
+            Debug.Log("Game backup created at: " + backupPath);
+        }
+        else
+        {
+            Debug.LogWarning("No game data to backup.");
+        }
     }
     
     public void LoadGame()
