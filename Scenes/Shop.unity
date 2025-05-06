@@ -181,6 +181,63 @@ MonoBehaviour:
   soulsPrefix: 
   energyPrefix: 
   healthPrefix: 
+--- !u!1001 &91497620
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6469850099032443351, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_Name
+      value: RuneSceneLoader
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7361343292114224909, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6bc23328f74d16540b42af1abc16b872, type: 3}
 --- !u!1001 &115329697
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3081,7 +3138,6 @@ MonoBehaviour:
   upgradeButton: {fileID: 213683376}
   goldText: {fileID: 591226698}
   soulsText: {fileID: 1068843417}
-  runesText: {fileID: 0}
   shopManager: {fileID: 2108608915}
   upgradeManager: {fileID: 889999174}
   exitButton: {fileID: 1152992259}
@@ -3821,3 +3877,4 @@ SceneRoots:
   - {fileID: 2108608916}
   - {fileID: 889999175}
   - {fileID: 1884124553}
+  - {fileID: 91497620}
