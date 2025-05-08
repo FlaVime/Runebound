@@ -10,7 +10,6 @@ public class TopBarResourceDisplay : MonoBehaviour
     public TMP_Text healthText;
     
     [Header("Format")]
-    public bool showIcons = true;
     public string goldPrefix = "";
     public string soulsPrefix = "";
     public string energyPrefix = "";

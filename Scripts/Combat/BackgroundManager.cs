@@ -21,15 +21,4 @@ public class BackgroundManager : MonoBehaviour
         
         backgroundImage.sprite = backgroundSprites[randomIndex];
     }
-    
-    public void SetBackground(int index)
-    {
-        if (backgroundImage == null || backgroundSprites == null || backgroundSprites.Length == 0)
-            return;
-        
-        if (index < 0 || index >= backgroundSprites.Length)
-            return;
-        
-        backgroundImage.sprite = backgroundSprites[index];
-    }
 } 
