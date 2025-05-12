@@ -37,6 +37,7 @@ jobs:
       - name: Rename build files and folder
         if: matrix.targetPlatform == 'StandaloneWindows64'
         run: |
+          chmod +w build/StandaloneWindows64/StandaloneWindows64.exe
           mv build/StandaloneWindows64/StandaloneWindows64.exe build/StandaloneWindows64/Runebound.exe
           mv build/StandaloneWindows64/StandaloneWindows64_Data build/StandaloneWindows64/Runebound_Data
           mv build/StandaloneWindows64 build/Runebound-Windows64
