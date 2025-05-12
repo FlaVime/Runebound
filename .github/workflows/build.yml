@@ -16,16 +16,13 @@ jobs:
         with:
           fetch-depth: 0
           lfs: true
-
       - uses: actions/cache@v3
         with:
           path: Library
           key: Library-${{ matrix.targetPlatform }}
           restore-keys: Library-
-
       - if: matrix.targetPlatform == 'Android'
         uses: jlumbroso/free-disk-space@v1.3.1
-
       - uses: game-ci/unity-builder@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
@@ -33,16 +30,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           targetPlatform: ${{ matrix.targetPlatform }}
-
-      - name: Rename build files and folder
-        if: matrix.targetPlatform == 'StandaloneWindows64'
-        run: |
-          chmod +w build/StandaloneWindows64/StandaloneWindows64.exe
-          mv build/StandaloneWindows64/StandaloneWindows64.exe build/StandaloneWindows64/Runebound.exe
-          mv build/StandaloneWindows64/StandaloneWindows64_Data build/StandaloneWindows64/Runebound_Data
-          mv build/StandaloneWindows64 build/Runebound-Windows64
-
       - uses: actions/upload-artifact@v4
         with:
-          name: Runebound-Windows64
-          path: build/Runebound-Windows64
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
