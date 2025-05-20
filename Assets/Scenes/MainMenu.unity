@@ -657,9 +657,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicSource: {fileID: 577956672}
+  audioMixer: {fileID: 24100000, guid: 056b36d4e37fda24bbf6ed9bce735b4d, type: 2}
   mainMenuMusic: {fileID: 8300000, guid: d0c33d6b1ecea894e8a3d8997e92031d, type: 3}
   mapMusic: {fileID: 8300000, guid: 69fa2696866ac0c46aac358b251b8794, type: 3}
-  audioMixer: {fileID: 24100000, guid: 056b36d4e37fda24bbf6ed9bce735b4d, type: 2}
+  combatClips:
+  - {fileID: 8300000, guid: 04d82d4107c8093498a57eabfbcf13af, type: 3}
+  - {fileID: 8300000, guid: 71112f8b764ded748ba540b6c79ce919, type: 3}
+  - {fileID: 8300000, guid: 54a5156d587478d4e96c6f560cd9df0c, type: 3}
+  - {fileID: 8300000, guid: d37af5201c753434b8ee931144cb6378, type: 3}
+  bossClips:
+  - {fileID: 8300000, guid: c1f0a164e4c06d74c984a95b2a4bccfd, type: 3}
+  - {fileID: 8300000, guid: ed0d4187596f164408714c838d06c130, type: 3}
+  - {fileID: 8300000, guid: 20cc7b8669afd26428c844b518209a24, type: 3}
 --- !u!1 &617184992
 GameObject:
   m_ObjectHideFlags: 0

@@ -95,6 +95,27 @@ public class GameManager : Singleton<GameManager>
         CurrentState = newState;
         OnGameStateChanged?.Invoke(newState);
 
+        if (MusicManager.Instance != null)
+        {
+            switch (newState)
+            {
+                case GameState.MainMenu:
+                    MusicManager.Instance.PlayMenuMusic();
+                    break;
+                case GameState.Map:
+                case GameState.Shop:
+                case GameState.Event:
+                    MusicManager.Instance.PlayMapMusic();
+                    break;
+                case GameState.Combat:
+                    MusicManager.Instance.PlayRandomCombatMusic();
+                    break;
+                case GameState.Boss:
+                    MusicManager.Instance.PlayRandomBossMusic();
+                    break;
+            }
+        }
+
         SceneLoader.Instance.Load(newState.ToString());
     }
 
@@ -172,7 +193,7 @@ public class GameManager : Singleton<GameManager>
         playerData.Init();
 
         SaveGame();
-        SceneManager.LoadScene("Map");
+        ChangeState(GameState.Map);
     }
 
     public void ContinueGame()
@@ -186,7 +207,7 @@ public class GameManager : Singleton<GameManager>
             playerData.onHealthChanged?.Invoke(playerData.maxHealth);
         }
 
-        SceneManager.LoadScene("Map");
+        ChangeState(GameState.Map);
     }
 
     public void ApplyEventOutcome(int gold, int souls, int health)

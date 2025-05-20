@@ -1,15 +1,21 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance;
 
+    [Header("Audio Setup")]
     [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioMixer audioMixer;
+
+    [Header("Music Clips")]
     [SerializeField] private AudioClip mainMenuMusic;
     [SerializeField] private AudioClip mapMusic;
-    [SerializeField] private AudioMixer audioMixer;
+    [SerializeField] private List<AudioClip> combatClips;
+    [SerializeField] private List<AudioClip> bossClips;
 
     private string currentTrack = "";
 
@@ -19,31 +25,29 @@ public class MusicManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneLoader.OnSceneLoaded += HandleSceneLoaded;
         }
         else
         {
             Destroy(gameObject);
-            return;
         }
-
-        PlayMenuMusic();
     }
 
-    private void OnDestroy()
+    private void HandleSceneLoaded(string sceneName)
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        switch (scene.name)
+        switch (sceneName)
         {
             case "MainMenu":
                 PlayMenuMusic();
                 break;
             case "Map":
                 PlayMapMusic();
+                break;
+            case "Combat":
+                PlayRandomCombatMusic();
+                break;
+            case "Boss":
+                PlayRandomBossMusic();
                 break;
         }
     }
@@ -56,6 +60,20 @@ public class MusicManager : MonoBehaviour
     public void PlayMapMusic()
     {
         PlayTrack(mapMusic, "Map");
+    }
+
+    public void PlayRandomCombatMusic()
+    {
+        if (combatClips.Count == 0) return;
+        AudioClip random = combatClips[Random.Range(0, combatClips.Count)];
+        PlayTrack(random, "Combat");
+    }
+
+    public void PlayRandomBossMusic()
+    {
+        if (bossClips.Count == 0) return;
+        AudioClip random = bossClips[Random.Range(0, bossClips.Count)];
+        PlayTrack(random, "Boss");
     }
 
     private void PlayTrack(AudioClip clip, string trackName)
