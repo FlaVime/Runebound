@@ -1,50 +1,66 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PauseController : MonoBehaviour {
-    public GameObject pauseMenu;
-    public GameObject settingsMenu;
-    public GameObject blocker;
+public class PauseController : MonoBehaviour
+{
+    [SerializeField] private GameObject pauseCanvas;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject settingsMenu;
 
     private bool isPaused = false;
 
-    void Update() 
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (settingsMenu.activeSelf) {
-                settingsMenu.SetActive(false);
-                pauseMenu.SetActive(true);
-                return;
-            }
+        if (SceneManager.GetActiveScene().name != "Map") return;
 
-            TogglePause();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (settingsMenu.activeSelf)
+            {
+                CloseSettings();
+            }
+            else
+            {
+                TogglePause();
+            }
         }
     }
 
-    public void TogglePause() 
+    public void TogglePause()
     {
         isPaused = !isPaused;
-        pauseMenu.SetActive(isPaused);
-        blocker.SetActive(isPaused);
+        Time.timeScale = isPaused ? 0f : 1f;
+
+        pauseCanvas?.SetActive(isPaused);
+        pauseMenu?.SetActive(isPaused);
+        settingsMenu?.SetActive(false);
     }
 
-    public void Resume() 
+    public void Resume()
     {
         isPaused = false;
-        pauseMenu.SetActive(false);
-        blocker.SetActive(false);
+        Time.timeScale = 1f;
+
+        pauseCanvas?.SetActive(false);
+        pauseMenu?.SetActive(false);
+        settingsMenu?.SetActive(false);
     }
 
-    public void OpenSettings() 
+    public void OpenSettings()
     {
-        pauseMenu.SetActive(false);
-        settingsMenu.SetActive(true);
+        pauseMenu?.SetActive(false);
+        settingsMenu?.SetActive(true);
     }
 
-    public void ExitToMenu() 
+    public void CloseSettings()
     {
-        isPaused = false;
-        blocker.SetActive(false);
+        settingsMenu?.SetActive(false);
+        pauseMenu?.SetActive(true);
+    }
+
+    public void ExitToMenu()
+    {
+        Resume();
         SceneManager.LoadScene("MainMenu");
     }
 }
