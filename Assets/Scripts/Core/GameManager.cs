@@ -18,6 +18,26 @@ public class GameManager : Singleton<GameManager> {
     
     [SerializeField] private PlayerData playerData = new PlayerData();
     public PlayerData PlayerData => playerData;
+
+    private void InitPlayerData()
+    {
+        if (!PlayerPrefs.HasKey("SavedGame"))
+        {
+            playerData.Init();
+        }
+        else
+        {
+            LoadGame();
+        }
+
+        if (playerData.currentHealth.Value <= 0)
+        {
+            playerData.Init();
+        }
+
+        playerData.onHealthChanged.AddListener(CheckPlayerHealth);
+    }
+    
     
     public event Action<GameState> OnGameStateChanged;
 

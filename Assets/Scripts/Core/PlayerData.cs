@@ -37,19 +37,19 @@ public class PlayerData
     
     public void AddGold(int amount)
     {
-        gold += amount;
+        gold.Set(gold + amount);
         onGoldChanged?.Invoke(gold);
     }
     
     public void AddSouls(int amount)
     {
-        souls += amount;
+        souls.Set(souls + amount);
         onSoulsChanged?.Invoke(souls);
     }
     
     public void TakeDamage(int damage)
     {
-        currentHealth = Mathf.Max(0, currentHealth - damage);
+        currentHealth.Set(Mathf.Max(0, currentHealth - damage));
         onHealthChanged?.Invoke(currentHealth);
     }
     
