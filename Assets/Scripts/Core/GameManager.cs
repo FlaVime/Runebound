@@ -193,7 +193,8 @@ public class GameManager : Singleton<GameManager>
         playerData.Init();
 
         SaveGame();
-        ChangeState(GameState.Map);
+        SceneManager.LoadScene("Map");
+        // ChangeState(GameState.Map);
     }
 
     public void ContinueGame()
@@ -207,7 +208,8 @@ public class GameManager : Singleton<GameManager>
             playerData.onHealthChanged?.Invoke(playerData.maxHealth);
         }
 
-        ChangeState(GameState.Map);
+        SceneManager.LoadScene("Map");
+        // ChangeState(GameState.Map);
     }
 
     public void ApplyEventOutcome(int gold, int souls, int health)
