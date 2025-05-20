@@ -8,14 +8,13 @@ public enum GameState {
     Combat,
     Event,
     Shop,
-    Boss,
-    GameOver,
-    Victory
+    Boss
 }
 
-public class GameManager : Singleton<GameManager> {
+public class GameManager : Singleton<GameManager>
+{
     public GameState CurrentState { get; private set; }
-    
+
     [SerializeField] private PlayerData playerData = new PlayerData();
     public PlayerData PlayerData => playerData;
 
@@ -34,17 +33,16 @@ public class GameManager : Singleton<GameManager> {
         {
             playerData.Init();
         }
-
-        playerData.onHealthChanged.AddListener(CheckPlayerHealth);
     }
-    
-    
+
+
     public event Action<GameState> OnGameStateChanged;
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         base.Awake();
         DontDestroyOnLoad(gameObject);
-        
+
         if (!PlayerPrefs.HasKey("SavedGame"))
         {
             playerData.Init();
@@ -53,77 +51,72 @@ public class GameManager : Singleton<GameManager> {
         {
             LoadGame();
         }
-        
+
         if (playerData.currentHealth.Value <= 0)
         {
             playerData.Init();
         }
-        
-        playerData.onHealthChanged.AddListener(CheckPlayerHealth);
     }
 
-    private void Start() {
-        if (SceneManager.GetActiveScene().name == "MainMenu") {
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
             ChangeState(GameState.MainMenu);
-        } else {
+        }
+        else
+        {
             LoadGame();
         }
     }
-    
+
     private void OnEnable()
     {
         SceneLoader.OnSceneLoaded += OnSceneLoaded;
     }
-    
+
     private void OnDisable()
     {
         SceneLoader.OnSceneLoaded -= OnSceneLoaded;
     }
-    
+
     private void OnSceneLoaded(string sceneName)
     {
         SaveGame();
     }
 
-    public void ChangeState(GameState newState) {
+    public void ChangeState(GameState newState)
+    {
         if (newState == CurrentState)
             return;
-            
+
         SaveGame();
-            
+
         CurrentState = newState;
         OnGameStateChanged?.Invoke(newState);
-        
+
         SceneLoader.Instance.Load(newState.ToString());
     }
-    
-    private void CheckPlayerHealth(int health)
-    {
-        if (health <= 0 && CurrentState != GameState.GameOver)
-        {
-            ChangeState(GameState.GameOver);
-        }
-    }
-    
+
     public void GiveRewards(int gold, int souls)
     {
         playerData.AddGold(gold);
         playerData.AddSouls(souls);
-        
+
         SaveGame();
-        
+
         MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
         if (mapSystem != null)
         {
             mapSystem.SaveMapState();
         }
     }
-    
+
     private void OnApplicationQuit()
     {
         SaveGame();
     }
-    
+
     public void SaveGame()
     {
         MapSystem mapSystem = FindFirstObjectByType<MapSystem>();
@@ -131,7 +124,7 @@ public class GameManager : Singleton<GameManager> {
         {
             mapSystem.SaveMapState();
         }
-        
+
         string json = JsonUtility.ToJson(playerData);
         PlayerPrefs.SetString("SavedGame", json);
         PlayerPrefs.Save();
@@ -156,11 +149,11 @@ public class GameManager : Singleton<GameManager> {
             GameLogger.Log("No game data to backup");
         }
     }
-    
+
     public void LoadGame()
     {
         if (PlayerPrefs.HasKey("SavedGame"))
-        {            
+        {
             string json = PlayerPrefs.GetString("SavedGame");
             JsonUtility.FromJsonOverwrite(json, playerData);
 
@@ -168,35 +161,31 @@ public class GameManager : Singleton<GameManager> {
         }
     }
 
-    public void StartNewGame() 
+    public void StartNewGame()
     {
         PlayerPrefs.DeleteKey("SavedGame");
         PlayerPrefs.DeleteKey("MapSaveData");
         PlayerPrefs.DeleteKey("VisitedNodeIndices");
         PlayerPrefs.Save();
-        
+
         playerData = new PlayerData();
         playerData.Init();
-        
+
         SaveGame();
         SceneManager.LoadScene("Map");
     }
 
-    public void ContinueGame() 
+    public void ContinueGame()
     {
         LoadGame();
-        SceneManager.LoadScene("Map");
-    }
 
-    public void RestartAfterDefeat() 
-    {
-        PlayerPrefs.DeleteKey("MapSaveData");
-        PlayerPrefs.DeleteKey("CurrentNodeIndex");
-        PlayerPrefs.DeleteKey("VisitedNodeIndices");
-        PlayerPrefs.Save();
+        // Check if the player is dead
+        if (playerData.currentHealth.Value <= 0)
+        {
+            playerData.currentHealth.Set(playerData.maxHealth);
+            playerData.onHealthChanged?.Invoke(playerData.maxHealth);
+        }
 
-        SaveGame();
-        playerData.currentHealth.Set(playerData.maxHealth);
         SceneManager.LoadScene("Map");
     }
 
@@ -212,7 +201,15 @@ public class GameManager : Singleton<GameManager> {
             playerData.Heal(health);
         else if (health < 0)
             playerData.TakeDamage(-health);
-        
+
         SaveGame();
+    }
+    
+    public void ResetMapOnly()
+    {
+        PlayerPrefs.DeleteKey("MapSaveData");
+        PlayerPrefs.DeleteKey("VisitedNodeIndices");
+        PlayerPrefs.DeleteKey("CurrentNodeIndex");
+        PlayerPrefs.Save();
     }
 }
