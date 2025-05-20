@@ -23,6 +23,7 @@ public class NodeView : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (Time.timeScale == 0f) return;
         if (!model.isUnlocked || model.isVisited) return;
 
         mapSystem.SelectNode(model.id);
