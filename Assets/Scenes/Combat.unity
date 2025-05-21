@@ -699,7 +699,7 @@ MonoBehaviour:
   abilityCost: 3
   energyPerTurn: 1
   abilityDamageMultiplier: 1.5
-  defendMultiplier: 0.5
+  defendMultiplier: 1
   skipMultiplier: 1.5
   playerHUD: {fileID: 125102211}
   enemyHUD: {fileID: 1526647759}
@@ -6871,7 +6871,6 @@ MonoBehaviour:
   soulsText: {fileID: 964945146}
   energyText: {fileID: 214780958}
   healthText: {fileID: 0}
-  showIcons: 1
   goldPrefix: 
   soulsPrefix: 
   energyPrefix: 

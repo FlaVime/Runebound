@@ -376,55 +376,39 @@ public class CombatManager : MonoBehaviour
     
     private IEnumerator EndCombatSequence()
     {
+        bool isBossFight = currentEnemy != null &&
+                        currentEnemy.enemyData != null &&
+                        currentEnemy.enemyData.isBoss;
+
+        bool wasVictory = combatState == CombatState.Won;
+
         yield return new WaitForSeconds(0.5f);
-        
+
         if (GameManager.Instance != null && playerUnit != null)
         {
             float healthPercentage = (float)playerUnit.currentHealth / playerUnit.maxHealth;
             int playerHealthValue = Mathf.RoundToInt(healthPercentage * GameManager.Instance.PlayerData.maxHealth);
-            
-            GameManager.Instance.PlayerData.currentHealth = playerHealthValue;
 
-            // Fire health changed event to update any UI
+            GameManager.Instance.PlayerData.currentHealth = playerHealthValue;
             GameManager.Instance.PlayerData.onHealthChanged?.Invoke(playerHealthValue);
-            
             GameManager.Instance.SaveGame();
         }
-        
-        // Hide individual characters if they exist
-        if (playerUnit != null && playerUnit.gameObject != null) playerUnit.gameObject.SetActive(false);
-        if (enemyUnit != null && enemyUnit.gameObject != null) enemyUnit.gameObject.SetActive(false);
-        
-        // Hide battle stations if using a combat area parent
-        if (combatArea != null)
-            combatArea.SetActive(false);
-        
-        // Hide HUD elements
-        if (playerHUD != null && playerHUD.gameObject != null)
-            playerHUD.gameObject.SetActive(false);
-            
-        if (enemyHUD != null && enemyHUD.gameObject != null)
-            enemyHUD.gameObject.SetActive(false);
-        
-        // Check if enemy is a boss
-        bool isBossFight = currentEnemy != null && currentEnemy is BossEnemy;
-        
-        // Show appropriate end game panel
-        if (combatState == CombatState.Won)
+
+        if (playerUnit != null) playerUnit.gameObject.SetActive(false);
+        if (enemyUnit != null) enemyUnit.gameObject.SetActive(false);
+        if (combatArea != null) combatArea.SetActive(false);
+        if (playerHUD != null) playerHUD.gameObject.SetActive(false);
+        if (enemyHUD != null) enemyHUD.gameObject.SetActive(false);
+
+        if (wasVictory)
         {
-            // For boss fight, show victory panel
             if (isBossFight && victoryPanel != null)
             {
-                // Show the victory panel
                 victoryPanel.SetActive(true);
             }
-            // For regular enemies, show rewards
             else
             {
-                if (rewardSystem != null)
-                {
-                    rewardSystem.ShowRewards();
-                }
+                rewardSystem?.ShowRewards();
             }
         }
         else if (combatState == CombatState.Lost)

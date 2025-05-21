@@ -61,6 +61,6 @@ public class PauseController : MonoBehaviour
     public void ExitToMenu()
     {
         Resume();
-        SceneManager.LoadScene("MainMenu");
+        GameManager.Instance.ChangeState(GameState.MainMenu);
     }
 }

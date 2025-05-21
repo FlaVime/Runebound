@@ -27,7 +27,10 @@ public class VictoryPanelController : MonoBehaviour
     private void OnAgainButtonClick()
     {
         if (GameManager.Instance != null)
-            GameManager.Instance.StartNewGame();
+        {
+            GameManager.Instance.ResetMapOnly();
+            GameManager.Instance.ContinueGame();
+        }
     }
 
     private void OnExitButtonClick()

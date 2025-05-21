@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Rune Golem
   m_EditorClassIdentifier: 
   enemyName: Rune Golem
+  isBoss: 1
   maxHealth: 100
   baseDamage: 16
   skipTurnChance: 0
