@@ -37,7 +37,7 @@ public class PlayerData
     
     public void AddGold(int amount)
     {
-        gold.Set(gold + amount);
+        gold.Set(Mathf.Max(0, gold + amount));
         onGoldChanged?.Invoke(gold);
     }
     
