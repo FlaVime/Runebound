@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: Shroomy
   m_EditorClassIdentifier: 
   enemyName: Shroomy
-  enemySprite: {fileID: -654737500350741434, guid: 7769271e5f02f1240ae95781a7bd3a8b, type: 3}
   maxHealth: 50
-  baseDamage: 8
+  baseDamage: 9
   skipTurnChance: 0.2
-  goldReward: 12
-  soulsReward: 4
-  abilityDescription: 
+  goldReward: 25
+  soulsReward: 10
   hasSpecialAbility: 1
   specialAbilityChance: 0.3
-  specialAbilityDamage: 5
+  specialAbilityDamage: 10

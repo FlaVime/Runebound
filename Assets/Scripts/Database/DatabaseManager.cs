@@ -45,10 +45,10 @@ public class DatabaseManager : MonoBehaviour
             {
                 var shopItems = new List<ShopItemData>
                 {
-                    new ShopItemData { itemID = CryptoUtils.Encrypt("potion_30"), itemName = CryptoUtils.Encrypt("Health Potion"), itemDescription = CryptoUtils.Encrypt("Restore 30 HP"), price = 15, currency = CryptoUtils.Encrypt("Gold") },
-                    new ShopItemData { itemID = CryptoUtils.Encrypt("potion_50"), itemName = CryptoUtils.Encrypt("Greater Potion"), itemDescription = CryptoUtils.Encrypt("Restore 50 HP"), price = 30, currency = CryptoUtils.Encrypt("Gold") },
-                    new ShopItemData { itemID = CryptoUtils.Encrypt("soul_5"), itemName = CryptoUtils.Encrypt("Soul Stone"), itemDescription = CryptoUtils.Encrypt("Get 5 Souls"), price = 50, currency = CryptoUtils.Encrypt("Gold") },
-                    new ShopItemData { itemID = CryptoUtils.Encrypt("soul_25"), itemName = CryptoUtils.Encrypt("Big Soul Stone"), itemDescription = CryptoUtils.Encrypt("Get 25 Souls"), price = 100, currency = CryptoUtils.Encrypt("Gold") }
+                    new ShopItemData { itemID = CryptoUtils.Encrypt("potion_30"), itemName = CryptoUtils.Encrypt("Health Potion"), itemDescription = CryptoUtils.Encrypt("Restore 30 HP"), price = 20, currency = CryptoUtils.Encrypt("Gold") },
+                    new ShopItemData { itemID = CryptoUtils.Encrypt("potion_50"), itemName = CryptoUtils.Encrypt("Greater Potion"), itemDescription = CryptoUtils.Encrypt("Restore 50 HP"), price = 35, currency = CryptoUtils.Encrypt("Gold") },
+                    new ShopItemData { itemID = CryptoUtils.Encrypt("soul_5"), itemName = CryptoUtils.Encrypt("Soul Stone"), itemDescription = CryptoUtils.Encrypt("Get 5 Souls"), price = 70, currency = CryptoUtils.Encrypt("Gold") },
+                    new ShopItemData { itemID = CryptoUtils.Encrypt("soul_25"), itemName = CryptoUtils.Encrypt("Big Soul Stone"), itemDescription = CryptoUtils.Encrypt("Get 25 Souls"), price = 150, currency = CryptoUtils.Encrypt("Gold") }
                 };
 
                 foreach (var item in shopItems)

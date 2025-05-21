@@ -27,7 +27,7 @@ public class PlayerData
     public void Init()
     {
         gold.Set(100); // Starting gold
-        souls.Set(200); // Starting souls
+        souls.Set(20); // Starting souls
         currentHealth.Set(maxHealth);
         energy.Set(maxEnergy);
         baseDamage.Set(15f); // Starting base damage
