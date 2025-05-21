@@ -34,33 +34,73 @@ public class MapSystem : MonoBehaviour
         nodeModels.Clear();
         nodeViews.Clear();
 
-        float yOffset = 2f;
+        float yOffset = 0.5f;
 
-        CreateNode(0, "Combat", new Vector2(0, -6 + yOffset));
-        
-        // Create level 1 nodes
-        CreateNode(1, "Event", new Vector2(-2, -4 + yOffset));
-        CreateNode(2, "Shop", new Vector2(2, -4 + yOffset));
-        
-        // Create level 2 nodes
-        CreateNode(3, "Combat", new Vector2(-3, -2 + yOffset));
-        CreateNode(4, "Event", new Vector2(-1, -2 + yOffset));
-        CreateNode(5, "Combat", new Vector2(1, -2 + yOffset));
-        CreateNode(6, "Event", new Vector2(3, -2 + yOffset));
-        
-        // Create level 3 nodes
-        CreateNode(7, "Boss", new Vector2(0, 0 + yOffset));
+        // === Level 0 ===
+        CreateNode(0, "Combat", new Vector2(0, -5));
 
+        // === Level 1 ===
+        CreateNode(1, "Event", new Vector2(-3, -4 + yOffset));
+        CreateNode(2, "Combat", new Vector2(3, -4 + yOffset));
+
+        // === Level 2 ===
+        CreateNode(3, "Combat", new Vector2(-4, -2.5f + yOffset));
+        CreateNode(4, "Shop", new Vector2(-2, -2.5f + yOffset));
+        CreateNode(5, "Event", new Vector2(2, -2.5f + yOffset));
+        CreateNode(6, "Combat", new Vector2(4, -2.5f + yOffset));
+
+        // === Level 3 ===
+        CreateNode(7, "Event", new Vector2(-3, -1 + yOffset));
+        CreateNode(8, "Combat", new Vector2(0, -1 + yOffset));
+        CreateNode(9, "Shop", new Vector2(3, -1 + yOffset));
+
+        // === Level 4 ===
+        CreateNode(10, "Combat", new Vector2(-2, 0.5f + yOffset));
+        CreateNode(11, "Event", new Vector2(2, 0.5f + yOffset));
+
+        // === Level 5 ===
+        CreateNode(12, "Combat", new Vector2(-3, 2f + yOffset));
+        CreateNode(13, "Event", new Vector2(-1.5f, 2f + yOffset));
+        CreateNode(14, "Shop", new Vector2(0, 2f + yOffset));
+        CreateNode(15, "Combat", new Vector2(1.5f, 2f + yOffset));
+        CreateNode(16, "Event", new Vector2(3, 2f + yOffset));
+
+        // === Final Level ===
+        CreateNode(17, "Boss", new Vector2(0, 3.5f + yOffset));
+
+        // === Connections ===
         ConnectNodes(0, 1);
         ConnectNodes(0, 2);
+
         ConnectNodes(1, 3);
         ConnectNodes(1, 4);
         ConnectNodes(2, 5);
         ConnectNodes(2, 6);
+
         ConnectNodes(3, 7);
-        ConnectNodes(4, 7);
-        ConnectNodes(5, 7);
-        ConnectNodes(6, 7);
+        ConnectNodes(4, 8);
+        ConnectNodes(5, 9);
+        ConnectNodes(6, 9);
+
+        ConnectNodes(7, 10);
+        ConnectNodes(8, 10);
+        ConnectNodes(8, 11);
+        ConnectNodes(9, 11);
+
+        // Level 4 → Level 5
+        ConnectNodes(10, 12);
+        ConnectNodes(10, 13);
+        ConnectNodes(11, 14);
+        ConnectNodes(11, 15);
+        ConnectNodes(10, 14);
+        ConnectNodes(11, 16);
+
+        // Level 5 → Boss
+        ConnectNodes(12, 17);
+        ConnectNodes(13, 17);
+        ConnectNodes(14, 17);
+        ConnectNodes(15, 17);
+        ConnectNodes(16, 17);
 
         MapSaveData generated = new MapSaveData();
         generated.currentNodeId = 0;
