@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Rune Golem
   m_EditorClassIdentifier: 
   enemyName: Rune Golem
+  isBoss: 1
   maxHealth: 100
-  baseDamage: 20
-  skipTurnChance: 0.1
+  baseDamage: 16
+  skipTurnChance: 0
   goldReward: 100
-  soulsReward: 50
-  abilityDescription: 
+  soulsReward: 100
   hasSpecialAbility: 1
-  specialAbilityChance: 0.6
-  specialAbilityDamage: 40
+  specialAbilityChance: 0.5
+  specialAbilityDamage: 25

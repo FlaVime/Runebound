@@ -62,7 +62,7 @@ public class RewardSystem : MonoBehaviour
             rewardName = "Gold",
             icon = goldIcon,
             type = RewardType.Gold,
-            value = 25
+            value = Random.Range(15, 40)
         };
         
         // Souls reward
@@ -71,7 +71,7 @@ public class RewardSystem : MonoBehaviour
             rewardName = "Souls",
             icon = soulsIcon,
             type = RewardType.Souls,
-            value = 15
+            value = Random.Range(8, 25)
         };
         
         // Health reward

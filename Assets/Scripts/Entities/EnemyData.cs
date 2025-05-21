@@ -5,7 +5,8 @@ public class EnemyData : ScriptableObject
 {
     [Header("Identity")]
     public string enemyName = "Enemy";
-    
+    public bool isBoss;
+
     [Header("Stats")]
     public float maxHealth = 100f;
     public float baseDamage = 10f;

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 [System.Serializable]
 public class PlayerData
 {
-    public int maxHealth = 100;
+    public int maxHealth = 80;
     public ProjectedInt currentHealth;
     
     public int maxEnergy = 3;
@@ -27,17 +27,17 @@ public class PlayerData
     public void Init()
     {
         gold.Set(100); // Starting gold
-        souls.Set(200); // Starting souls
+        souls.Set(20); // Starting souls
         currentHealth.Set(maxHealth);
         energy.Set(maxEnergy);
         baseDamage.Set(15f); // Starting base damage
-        baseDefense.Set(1f); // Starting base defense
+        baseDefense.Set(0f); // Starting base defense
         purchasedUpgrades.Clear();
     }
     
     public void AddGold(int amount)
     {
-        gold.Set(gold + amount);
+        gold.Set(Mathf.Max(0, gold + amount));
         onGoldChanged?.Invoke(gold);
     }
     

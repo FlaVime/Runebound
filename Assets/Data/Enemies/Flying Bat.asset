@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: Flying Bat
   m_EditorClassIdentifier: 
   enemyName: Flying Bat
-  enemySprite: {fileID: -955609468180279937, guid: c94668f98964edb44b581cb7b4cb50f4, type: 3}
   maxHealth: 40
   baseDamage: 6
   skipTurnChance: 0.3
-  goldReward: 10
-  soulsReward: 3
-  abilityDescription: 
+  goldReward: 15
+  soulsReward: 5
   hasSpecialAbility: 0
   specialAbilityChance: 0.3
   specialAbilityDamage: 15

@@ -112,8 +112,8 @@ MonoBehaviour:
       m_Calls: []
   enemyData: {fileID: 11400000, guid: 9d1ee8a69a425004a877bb2df5c1f92a, type: 2}
   skipTurnChance: 0.2
-  goldReward: 10
-  soulsReward: 5
+  goldReward: 25
+  soulsReward: 10
   onAttackPlayer:
     m_PersistentCalls:
       m_Calls: []

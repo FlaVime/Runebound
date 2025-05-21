@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: Scull Wolf
   m_EditorClassIdentifier: 
   enemyName: Scull Wolf
-  enemySprite: {fileID: -3654092879298017055, guid: 90afc90e5258cc34d929678dc7425568, type: 3}
   maxHealth: 60
   baseDamage: 10
   skipTurnChance: 0.1
-  goldReward: 15
-  soulsReward: 5
-  abilityDescription: 
+  goldReward: 40
+  soulsReward: 20
   hasSpecialAbility: 1
   specialAbilityChance: 0.25
   specialAbilityDamage: 15

@@ -45,10 +45,10 @@ public class DatabaseManager : MonoBehaviour
             {
                 var shopItems = new List<ShopItemData>
                 {
-                    new ShopItemData { itemID = CryptoUtils.Encrypt("potion_30"), itemName = CryptoUtils.Encrypt("Health Potion"), itemDescription = CryptoUtils.Encrypt("Restore 30 HP"), price = 15, currency = CryptoUtils.Encrypt("Gold") },
-                    new ShopItemData { itemID = CryptoUtils.Encrypt("potion_50"), itemName = CryptoUtils.Encrypt("Greater Potion"), itemDescription = CryptoUtils.Encrypt("Restore 50 HP"), price = 30, currency = CryptoUtils.Encrypt("Gold") },
-                    new ShopItemData { itemID = CryptoUtils.Encrypt("soul_5"), itemName = CryptoUtils.Encrypt("Soul Stone"), itemDescription = CryptoUtils.Encrypt("Get 5 Souls"), price = 50, currency = CryptoUtils.Encrypt("Gold") },
-                    new ShopItemData { itemID = CryptoUtils.Encrypt("soul_25"), itemName = CryptoUtils.Encrypt("Big Soul Stone"), itemDescription = CryptoUtils.Encrypt("Get 25 Souls"), price = 100, currency = CryptoUtils.Encrypt("Gold") }
+                    new ShopItemData { itemID = CryptoUtils.Encrypt("potion_30"), itemName = CryptoUtils.Encrypt("Health Potion"), itemDescription = CryptoUtils.Encrypt("Restore 30 HP"), price = 20, currency = CryptoUtils.Encrypt("Gold") },
+                    new ShopItemData { itemID = CryptoUtils.Encrypt("potion_50"), itemName = CryptoUtils.Encrypt("Greater Potion"), itemDescription = CryptoUtils.Encrypt("Restore 50 HP"), price = 35, currency = CryptoUtils.Encrypt("Gold") },
+                    new ShopItemData { itemID = CryptoUtils.Encrypt("soul_5"), itemName = CryptoUtils.Encrypt("Soul Stone"), itemDescription = CryptoUtils.Encrypt("Get 5 Souls"), price = 70, currency = CryptoUtils.Encrypt("Gold") },
+                    new ShopItemData { itemID = CryptoUtils.Encrypt("soul_25"), itemName = CryptoUtils.Encrypt("Big Soul Stone"), itemDescription = CryptoUtils.Encrypt("Get 25 Souls"), price = 150, currency = CryptoUtils.Encrypt("Gold") }
                 };
 
                 foreach (var item in shopItems)
@@ -64,8 +64,8 @@ public class DatabaseManager : MonoBehaviour
                 var upgrades = new List<UpgradeData>
                 {
                     new UpgradeData { upgradeID = CryptoUtils.Encrypt("max_health"), upgradeName = CryptoUtils.Encrypt("Max Health + 20"), upgradeDescription = CryptoUtils.Encrypt("Permanently increase max HP"), price = 50, currency = CryptoUtils.Encrypt("Souls") },
-                    new UpgradeData { upgradeID = CryptoUtils.Encrypt("damage_boost"), upgradeName = CryptoUtils.Encrypt("Base Damage + 2"), upgradeDescription = CryptoUtils.Encrypt("Increase your attack power"), price = 75, currency = CryptoUtils.Encrypt("Souls") },
-                    new UpgradeData { upgradeID = CryptoUtils.Encrypt("defense_boost"), upgradeName = CryptoUtils.Encrypt("Defence + 1"), upgradeDescription = CryptoUtils.Encrypt("Reduce damage taken"), price = 60, currency = CryptoUtils.Encrypt("Souls") },
+                    new UpgradeData { upgradeID = CryptoUtils.Encrypt("damage_boost"), upgradeName = CryptoUtils.Encrypt("Base Damage + 2"), upgradeDescription = CryptoUtils.Encrypt("Increase your attack power"), price = 50, currency = CryptoUtils.Encrypt("Souls") },
+                    new UpgradeData { upgradeID = CryptoUtils.Encrypt("defense_boost"), upgradeName = CryptoUtils.Encrypt("Defence + 1"), upgradeDescription = CryptoUtils.Encrypt("Reduce damage taken"), price = 80, currency = CryptoUtils.Encrypt("Souls") },
                     new UpgradeData { upgradeID = CryptoUtils.Encrypt("max_energy"), upgradeName = CryptoUtils.Encrypt("Max Energy + 1"), upgradeDescription = CryptoUtils.Encrypt("Increase your max energy"), price = 70, currency = CryptoUtils.Encrypt("Souls") },
                 };
 
