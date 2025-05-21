@@ -435,29 +435,4 @@ public class CombatManager : MonoBehaviour
             GameManager.Instance.ChangeState(GameState.Map);
         }
     }
-    
-    // public void RestartCombat()
-    // {
-    //     // Hide end game panels
-    //     if (gameOverPanel != null) gameOverPanel.SetActive(false);
-    //     if (rewardPanel != null) rewardPanel.SetActive(false);
-    //     if (victoryPanel != null) victoryPanel.SetActive(false);
-        
-    //     // Also hide reward panel if it exists
-    //     if (rewardSystem != null && rewardSystem.rewardPanel != null) 
-    //         rewardSystem.rewardPanel.SetActive(false);
-        
-    //     // Show HUD elements
-    //     if (playerHUD != null && playerHUD.gameObject != null)
-    //         playerHUD.gameObject.SetActive(true);
-            
-    //     if (enemyHUD != null && enemyHUD.gameObject != null)
-    //         enemyHUD.gameObject.SetActive(true);
-            
-    //     // Clean up existing characters
-    //     if (playerUnit != null) Destroy(playerUnit.gameObject);
-    //     if (enemyUnit != null) Destroy(enemyUnit.gameObject);
-        
-    //     Start();
-    // }
 } 

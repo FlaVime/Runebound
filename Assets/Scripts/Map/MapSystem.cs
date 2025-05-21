@@ -172,7 +172,7 @@ public class MapSystem : MonoBehaviour
         lr.SetPosition(1, end);
         lr.startWidth = lr.endWidth = 0.05f;
         lr.material = new Material(Shader.Find("Sprites/Default"));
-        lr.startColor = lr.endColor = Color.white;
+        lr.startColor = lr.endColor = new Color(0.2f, 0.2f, 0.2f);
         lr.sortingOrder = 1;
 
         connectionLines.Add(connectionLines.Count, lr);
