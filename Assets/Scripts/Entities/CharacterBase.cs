@@ -8,7 +8,6 @@ public class CharacterBase : MonoBehaviour {
     public float maxHealth = 100f;
     public float currentHealth;
     public float baseDamage = 10f;
-    protected float defenseMultiplier = 1f;
 
     public UnityEvent<float> onHealthChanged;
     public UnityEvent onDeath;
@@ -23,7 +22,7 @@ public class CharacterBase : MonoBehaviour {
 
     public virtual void TakeDamage(float damage)
     {
-        float actualDamage = damage * defenseMultiplier;
+        float actualDamage = damage;
         currentHealth = Mathf.Max(0, currentHealth - actualDamage);
         onHealthChanged?.Invoke(currentHealth / maxHealth);
 
@@ -36,17 +35,6 @@ public class CharacterBase : MonoBehaviour {
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
         onHealthChanged?.Invoke(currentHealth / maxHealth);
     }
-
-    public virtual void SetDefenseMultiplier(float multiplier)
-    {
-        defenseMultiplier = multiplier;
-    }
-
-    public virtual void ResetDefenseMultiplier()
-    {
-        defenseMultiplier = 1f;
-    }
-
 
     protected virtual void Die()
     {

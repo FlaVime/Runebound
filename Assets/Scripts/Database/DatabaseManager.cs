@@ -64,8 +64,8 @@ public class DatabaseManager : MonoBehaviour
                 var upgrades = new List<UpgradeData>
                 {
                     new UpgradeData { upgradeID = CryptoUtils.Encrypt("max_health"), upgradeName = CryptoUtils.Encrypt("Max Health + 20"), upgradeDescription = CryptoUtils.Encrypt("Permanently increase max HP"), price = 50, currency = CryptoUtils.Encrypt("Souls") },
-                    new UpgradeData { upgradeID = CryptoUtils.Encrypt("damage_boost"), upgradeName = CryptoUtils.Encrypt("Base Damage + 2"), upgradeDescription = CryptoUtils.Encrypt("Increase your attack power"), price = 75, currency = CryptoUtils.Encrypt("Souls") },
-                    new UpgradeData { upgradeID = CryptoUtils.Encrypt("defense_boost"), upgradeName = CryptoUtils.Encrypt("Defence + 1"), upgradeDescription = CryptoUtils.Encrypt("Reduce damage taken"), price = 60, currency = CryptoUtils.Encrypt("Souls") },
+                    new UpgradeData { upgradeID = CryptoUtils.Encrypt("damage_boost"), upgradeName = CryptoUtils.Encrypt("Base Damage + 2"), upgradeDescription = CryptoUtils.Encrypt("Increase your attack power"), price = 50, currency = CryptoUtils.Encrypt("Souls") },
+                    new UpgradeData { upgradeID = CryptoUtils.Encrypt("defense_boost"), upgradeName = CryptoUtils.Encrypt("Defence + 1"), upgradeDescription = CryptoUtils.Encrypt("Reduce damage taken"), price = 80, currency = CryptoUtils.Encrypt("Souls") },
                     new UpgradeData { upgradeID = CryptoUtils.Encrypt("max_energy"), upgradeName = CryptoUtils.Encrypt("Max Energy + 1"), upgradeDescription = CryptoUtils.Encrypt("Increase your max energy"), price = 70, currency = CryptoUtils.Encrypt("Souls") },
                 };
 

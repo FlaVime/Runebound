@@ -346,7 +346,8 @@ public class CombatManager : MonoBehaviour
     {
         yield return ExecutePlayerAction(() =>
         {
-            playerUnit.SetDefenseMultiplier(defendMultiplier);
+            if (playerUnit is PlayerCharacter pc)
+                pc.SetDefenseMultiplier(defendMultiplier);
         });
     }
     
@@ -363,7 +364,9 @@ public class CombatManager : MonoBehaviour
     {
         yield return ExecutePlayerAction(() =>
         {
-            playerUnit.SetDefenseMultiplier(skipMultiplier);
+            if (playerUnit is PlayerCharacter pc)
+                pc.SetDefenseMultiplier(skipMultiplier);
+
             playerHUD.SetHealth(playerUnit.currentHealth);
         });
     }
@@ -433,28 +436,28 @@ public class CombatManager : MonoBehaviour
         }
     }
     
-    public void RestartCombat()
-    {
-        // Hide end game panels
-        if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        if (rewardPanel != null) rewardPanel.SetActive(false);
-        if (victoryPanel != null) victoryPanel.SetActive(false);
+    // public void RestartCombat()
+    // {
+    //     // Hide end game panels
+    //     if (gameOverPanel != null) gameOverPanel.SetActive(false);
+    //     if (rewardPanel != null) rewardPanel.SetActive(false);
+    //     if (victoryPanel != null) victoryPanel.SetActive(false);
         
-        // Also hide reward panel if it exists
-        if (rewardSystem != null && rewardSystem.rewardPanel != null) 
-            rewardSystem.rewardPanel.SetActive(false);
+    //     // Also hide reward panel if it exists
+    //     if (rewardSystem != null && rewardSystem.rewardPanel != null) 
+    //         rewardSystem.rewardPanel.SetActive(false);
         
-        // Show HUD elements
-        if (playerHUD != null && playerHUD.gameObject != null)
-            playerHUD.gameObject.SetActive(true);
+    //     // Show HUD elements
+    //     if (playerHUD != null && playerHUD.gameObject != null)
+    //         playerHUD.gameObject.SetActive(true);
             
-        if (enemyHUD != null && enemyHUD.gameObject != null)
-            enemyHUD.gameObject.SetActive(true);
+    //     if (enemyHUD != null && enemyHUD.gameObject != null)
+    //         enemyHUD.gameObject.SetActive(true);
             
-        // Clean up existing characters
-        if (playerUnit != null) Destroy(playerUnit.gameObject);
-        if (enemyUnit != null) Destroy(enemyUnit.gameObject);
+    //     // Clean up existing characters
+    //     if (playerUnit != null) Destroy(playerUnit.gameObject);
+    //     if (enemyUnit != null) Destroy(enemyUnit.gameObject);
         
-        Start();
-    }
+    //     Start();
+    // }
 } 
